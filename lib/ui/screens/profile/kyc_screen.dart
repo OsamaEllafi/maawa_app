@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:go_router/go_router.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../widgets/common/app_snackbar.dart';
@@ -305,7 +304,7 @@ class _KYCScreenState extends State<KYCScreen> {
             Container(
               padding: EdgeInsets.all(Spacing.sm),
               decoration: BoxDecoration(
-                color: statusColor.withOpacity(0.1),
+                color: statusColor.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(BorderRadiusTokens.medium),
               ),
               child: Icon(

@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../l10n/app_localizations.dart';
-import '../../core/theme/app_theme.dart';
 import 'bottom_nav.dart';
-import '../../app/navigation/app_router.dart';
 
 /// Main scaffold layout that wraps authenticated screens
 class MainScaffold extends StatelessWidget {
@@ -18,6 +15,8 @@ class MainScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     final location = GoRouterState.of(context).uri.toString();
     final showBottomNav = _shouldShowBottomNav(location);
+    
+    debugPrint('loc=${GoRouterState.of(context).matchedLocation}');
 
     return Scaffold(
       body: SafeArea(
@@ -36,10 +35,12 @@ class MainScaffold extends StatelessWidget {
       '/bookings/my',
       '/bookings/request',
       '/bookings/',
+      '/tenant/wallet',
       '/wallet',
       '/wallet/topup',
       '/wallet/withdraw',
       '/wallet/history',
+      '/tenant/profile',
       '/profile',
       '/settings',
     ];

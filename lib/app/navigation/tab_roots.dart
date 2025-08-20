@@ -15,7 +15,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../l10n/app_localizations.dart';
 
-
 /// Check if the given location is a tab root path
 ///
 /// Returns true if the location starts with any of the tab root paths.
@@ -31,7 +30,9 @@ bool isTabRootPath(String location) {
     '/tenant/home',
     '/tenant/bookings/my',
     '/tenant/wallet',
+    '/wallet', // Legacy support
     '/tenant/profile',
+    '/profile', // Legacy support
   };
 
   return tabRootPaths.any((rootPath) => location.startsWith(rootPath));

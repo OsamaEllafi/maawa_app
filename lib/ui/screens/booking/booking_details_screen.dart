@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../../l10n/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../widgets/common/app_top_bar.dart';
 
@@ -12,7 +11,6 @@ class BookingDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final booking = _getBookingDetails(bookingId);
 
@@ -82,7 +80,7 @@ class BookingDetailsScreen extends StatelessWidget {
                       width: 80,
                       height: 80,
                       decoration: BoxDecoration(
-                        color: theme.colorScheme.surfaceVariant,
+                        color: theme.colorScheme.surfaceContainerHighest,
                         borderRadius: BorderRadius.circular(
                           BorderRadiusTokens.medium,
                         ),

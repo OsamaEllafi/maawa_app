@@ -11,7 +11,6 @@ class RouteInspectorPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final routerState = GoRouterState.of(context);
 
     return Scaffold(

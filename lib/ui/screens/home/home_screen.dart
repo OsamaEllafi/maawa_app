@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/utils/accessibility_helper.dart';
 import '../../../demo/demo_data.dart';
 import '../../widgets/common/property_card.dart';
 import '../../widgets/common/filters_bar.dart';
-import '../../widgets/common/skeleton_list.dart';
-import '../../../app/navigation/app_router.dart';
+import '../../widgets/common/skeleton_loader.dart';
+import '../../widgets/common/animated_button.dart';
 
 /// Home screen for property browsing
 class HomeScreen extends StatefulWidget {
@@ -176,42 +177,36 @@ class _HomeScreenState extends State<HomeScreen>
                 children: [
                   Text(
                     '${_filteredProperties.length} properties found',
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.colorScheme.onSurfaceVariant,
+                    style: AccessibilityHelper.ensureTextScaling(
+                      (theme.textTheme.bodyMedium ?? theme.textTheme.bodyLarge!).copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
                     ),
                   ),
                   const Spacer(),
-                  Semantics(
-                    label: !_isGridView
+                  AnimatedIconButton(
+                    icon: Icons.view_list,
+                    semanticLabel: !_isGridView
                         ? 'List view selected'
                         : 'Switch to list view',
-                    child: IconButton(
-                      onPressed: () {
-                        setState(() {
-                          _isGridView = false;
-                        });
-                      },
-                      icon: Icon(
-                        Icons.view_list,
-                        color: !_isGridView ? theme.colorScheme.primary : null,
-                      ),
-                    ),
+                    onPressed: () {
+                      setState(() {
+                        _isGridView = false;
+                      });
+                    },
+                    iconColor: !_isGridView ? theme.colorScheme.primary : null,
                   ),
-                  Semantics(
-                    label: _isGridView
+                  AnimatedIconButton(
+                    icon: Icons.grid_view,
+                    semanticLabel: _isGridView
                         ? 'Grid view selected'
                         : 'Switch to grid view',
-                    child: IconButton(
-                      onPressed: () {
-                        setState(() {
-                          _isGridView = true;
-                        });
-                      },
-                      icon: Icon(
-                        Icons.grid_view,
-                        color: _isGridView ? theme.colorScheme.primary : null,
-                      ),
-                    ),
+                    onPressed: () {
+                      setState(() {
+                        _isGridView = true;
+                      });
+                    },
+                    iconColor: _isGridView ? theme.colorScheme.primary : null,
                   ),
                 ],
               ),
@@ -233,7 +228,7 @@ class _HomeScreenState extends State<HomeScreen>
             SliverToBoxAdapter(
               child: SizedBox(
                 height: MediaQuery.of(context).size.height * 0.6,
-                child: SkeletonList(isGridView: _isGridView),
+                child: _isGridView ? SkeletonGrid() : SkeletonList(),
               ),
             )
           else if (_filteredProperties.isEmpty)

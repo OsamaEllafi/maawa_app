@@ -37,7 +37,7 @@ void main() {
 
         await tester.pumpWidget(
           MediaQuery(
-            data: const MediaQueryData(textScaleFactor: 1.3),
+            data: const MediaQueryData(textScaler: TextScaler.linear(1.3)),
             child: createTestApp(locale: const Locale('en')),
           ),
         );
@@ -63,7 +63,7 @@ void main() {
 
       await tester.pumpWidget(
         MediaQuery(
-          data: const MediaQueryData(textScaleFactor: 1.3),
+          data: const MediaQueryData(textScaler: TextScaler.linear(1.3)),
           child: createTestApp(locale: const Locale('ar')),
         ),
       );
@@ -88,7 +88,7 @@ void main() {
 
       await tester.pumpWidget(
         MediaQuery(
-          data: const MediaQueryData(textScaleFactor: 1.3),
+          data: const MediaQueryData(textScaler: TextScaler.linear(1.3)),
           child: createTestApp(locale: const Locale('en')),
         ),
       );

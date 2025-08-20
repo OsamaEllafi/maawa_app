@@ -306,8 +306,11 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String invalidBookingIdMessage(Object id) {
-    return 'لم يتم العثور على الحجز برقم المعرف \'$id\'. قد يكون قد تم إلغاؤه أو المعرف غير صحيح.';
+    return 'الحجز برقم \'$id\' غير موجود. قد يكون قد تم إلغاؤه أو الرقم غير صحيح.';
   }
+
+  @override
+  String get paymentSimulated => 'تمت محاكاة الدفع';
 
   @override
   String invalidIdMessage(Object id) {
@@ -336,7 +339,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get perNight => 'لليلة الواحدة';
 
   @override
-  String get guests => 'ضيوف';
+  String get guests => 'الضيوف';
 
   @override
   String get media => 'الوسائط';
@@ -366,7 +369,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get noRejectedProperties => 'لا توجد عقارات مرفوضة';
 
   @override
-  String get addFirstProperty => 'أضف أول عقار لك';
+  String get addFirstProperty => 'أضف أول عقار';
 
   @override
   String get editProperty => 'تعديل العقار';
@@ -679,4 +682,643 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get next => 'التالي';
+
+  @override
+  String get bookingRequest => 'طلب الحجز';
+
+  @override
+  String get checkInDate => 'تاريخ الوصول';
+
+  @override
+  String get checkOutDate => 'تاريخ المغادرة';
+
+  @override
+  String get numberOfGuests => 'عدد الضيوف';
+
+  @override
+  String get messageToOwner => 'رسالة للمالك (اختياري)';
+
+  @override
+  String get messageHint => 'أضف أي طلبات خاصة أو أسئلة...';
+
+  @override
+  String get pricePerNightLabel => 'السعر لليلة الواحدة:';
+
+  @override
+  String get numberOfNights => 'عدد الليالي:';
+
+  @override
+  String get total => 'المجموع:';
+
+  @override
+  String get submitBookingRequest => 'إرسال طلب الحجز';
+
+  @override
+  String get myBookings => 'حجوزاتي';
+
+  @override
+  String get requested => 'مطلوب';
+
+  @override
+  String get pendingPayment => 'في انتظار الدفع';
+
+  @override
+  String get confirmed => 'مؤكد';
+
+  @override
+  String get completed => 'مكتمل';
+
+  @override
+  String get cancelled => 'ملغي';
+
+  @override
+  String get expired => 'منتهي الصلاحية';
+
+  @override
+  String noBookings(Object status) {
+    return 'لا توجد حجوزات $status';
+  }
+
+  @override
+  String noBookingsMessage(Object status) {
+    return 'ستظهر حجوزاتك $status هنا';
+  }
+
+  @override
+  String get bookingDetails => 'تفاصيل الحجز';
+
+  @override
+  String get property => 'العقار';
+
+  @override
+  String get bookingDetailsTitle => 'تفاصيل الحجز';
+
+  @override
+  String get checkIn => 'تسجيل الوصول';
+
+  @override
+  String get checkOut => 'تسجيل المغادرة';
+
+  @override
+  String get nights => 'الليالي';
+
+  @override
+  String get message => 'الرسالة';
+
+  @override
+  String get timeline => 'الجدول الزمني';
+
+  @override
+  String get payNow => 'ادفع الآن';
+
+  @override
+  String guestsLabel(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ضيف',
+      many: '$count ضيفًا',
+      few: '$count ضيوف',
+      two: 'ضيفان',
+      one: 'ضيف واحد',
+      zero: 'لا يوجد ضيوف',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get bookingTimelineTitle => 'المخطط الزمني';
+
+  @override
+  String get bookingTimelineRequested => 'تم الطلب';
+
+  @override
+  String get bookingTimelineAccepted => 'قبِل المالك';
+
+  @override
+  String get bookingTimelinePendingPayment => 'في انتظار الدفع';
+
+  @override
+  String get bookingTimelineConfirmed => 'مؤكّد';
+
+  @override
+  String get contactOwner => 'تواصل مع المالك';
+
+  @override
+  String get viewProperty => 'عرض العقار';
+
+  @override
+  String get ownerBookings => 'حجوزات المالك';
+
+  @override
+  String get incomingRequests => 'الطلبات الواردة';
+
+  @override
+  String get activeBookings => 'الحجوزات النشطة';
+
+  @override
+  String get noIncomingRequests => 'لا توجد طلبات واردة';
+
+  @override
+  String get noIncomingRequestsMessage => 'ستظهر طلبات الحجز الجديدة هنا';
+
+  @override
+  String get noActiveBookings => 'لا توجد حجوزات نشطة';
+
+  @override
+  String get noActiveBookingsMessage => 'ستظهر حجوزاتك المؤكدة هنا';
+
+  @override
+  String get accept => 'قبول';
+
+  @override
+  String get reject => 'رفض';
+
+  @override
+  String get bookingAccepted => 'تم قبول الحجز';
+
+  @override
+  String get bookingRejected => 'تم رفض الحجز';
+
+  @override
+  String get messageFromGuest => 'رسالة من الضيف:';
+
+  @override
+  String requestedTimeAgo(Object timeAgo) {
+    return 'مطلوب $timeAgo';
+  }
+
+  @override
+  String confirmedTimeAgo(Object timeAgo) {
+    return 'مؤكد $timeAgo';
+  }
+
+  @override
+  String get paymentRequired => 'الدفع مطلوب';
+
+  @override
+  String get paymentRequiredMessage => 'أكمل الدفع لتأكيد الحجز';
+
+  @override
+  String get waitingForOwner => 'في انتظار رد المالك';
+
+  @override
+  String get bookingConfirmed => 'تم تأكيد حجزك';
+
+  @override
+  String get stayCompleted => 'تم إكمال إقامتك';
+
+  @override
+  String get bookingCancelled => 'تم إلغاء الحجز';
+
+  @override
+  String get paymentExpired => 'انتهت مهلة الدفع';
+
+  @override
+  String get bookingRequestSubmitted => 'تم إرسال طلب الحجز';
+
+  @override
+  String get ownerAcceptedRequest => 'قبل المالك طلبك';
+
+  @override
+  String get paymentRequiredWithin30 => 'الدفع مطلوب خلال 30 دقيقة';
+
+  @override
+  String get bookingConfirmedAfterPayment => 'تم تأكيد الحجز بعد الدفع';
+
+  @override
+  String get reviews => 'التقييمات';
+
+  @override
+  String get writeReview => 'اكتب تقييماً';
+
+  @override
+  String get writeFirstReview => 'اكتب أول تقييم';
+
+  @override
+  String reviewPropertyTitle(Object propertyName) {
+    return 'تقييم $propertyName';
+  }
+
+  @override
+  String get rating => 'التقييم';
+
+  @override
+  String get comment => 'التعليق';
+
+  @override
+  String get shareYourExperience => 'شارك تجربتك مع هذا العقار...';
+
+  @override
+  String get commentRequired => 'يرجى إضافة تعليق';
+
+  @override
+  String get commentTooShort => 'يجب أن يكون التعليق 10 أحرف على الأقل';
+
+  @override
+  String get submitReview => 'إرسال التقييم';
+
+  @override
+  String get reviewSubmitted => 'تم إرسال التقييم بنجاح!';
+
+  @override
+  String get noReviewsYet => 'لا توجد تقييمات حتى الآن';
+
+  @override
+  String get noReviews => 'لا توجد تقييمات';
+
+  @override
+  String get beTheFirstToReview => 'كن أول من يشارك تجربته';
+
+  @override
+  String get starsLabel => 'نجوم';
+
+  @override
+  String get ratingSlider => 'شريط التقييم';
+
+  @override
+  String get outOfFive => 'من 5 نجوم';
+
+  @override
+  String get manageUsers => 'إدارة المستخدمين';
+
+  @override
+  String get manageProperties => 'إدارة العقارات';
+
+  @override
+  String get walletAdjustments => 'تعديلات المحفظة';
+
+  @override
+  String get emailContentCopied => 'تم نسخ محتوى البريد الإلكتروني إلى الحافظة';
+
+  @override
+  String get clearFilters => 'مسح المرشحات';
+
+  @override
+  String get submitAdjustment => 'إرسال التعديل';
+
+  @override
+  String get adjustmentSuccessful => 'تم التعديل بنجاح';
+
+  @override
+  String get approve => 'موافقة';
+
+  @override
+  String get rejectProperty => 'رفض العقار';
+
+  @override
+  String get pleaseProvideReason => 'يرجى تقديم سبب للرفض';
+
+  @override
+  String get cancelBooking => 'إلغاء الحجز';
+
+  @override
+  String get keepBooking => 'الاحتفاظ بالحجز';
+
+  @override
+  String userActionCompleted(Object action, Object name) {
+    return 'تم $action المستخدم $name';
+  }
+
+  @override
+  String userPromoted(Object name) {
+    return 'تم ترقية المستخدم $name';
+  }
+
+  @override
+  String userDemoted(Object name) {
+    return 'تم تخفيض رتبة المستخدم $name';
+  }
+
+  @override
+  String get adminPropertiesManagement => 'إدارة عقارات المدير';
+
+  @override
+  String get confirmWithdrawal => 'تأكيد السحب';
+
+  @override
+  String get withdrawalRequested => 'تم طلب السحب';
+
+  @override
+  String get bookingSubmitted => 'تم إرسال الحجز';
+
+  @override
+  String get contact => 'تواصل';
+
+  @override
+  String get modifyDates => 'تعديل التواريخ';
+
+  @override
+  String get leaveReview => 'ترك تقييم';
+
+  @override
+  String get creditDebitCard => 'بطاقة ائتمان/خصم';
+
+  @override
+  String get cardTypes => 'فيزا، ماستركارد، أمريكان إكسبريس';
+
+  @override
+  String get bankTransfer => 'تحويل بنكي';
+
+  @override
+  String get directBankTransfer => 'تحويل بنكي مباشر';
+
+  @override
+  String get processing => 'جاري المعالجة...';
+
+  @override
+  String get pleaseWaitProcessing => 'يرجى الانتظار بينما نعالج طلب الشحن.';
+
+  @override
+  String get topupSuccessful => 'تم الشحن بنجاح';
+
+  @override
+  String get topupFailed => 'فشل الشحن';
+
+  @override
+  String get tryAgain => 'حاول مرة أخرى';
+
+  @override
+  String get light => 'فاتح';
+
+  @override
+  String get dark => 'داكن';
+
+  @override
+  String get system => 'النظام';
+
+  @override
+  String get english => 'الإنجليزية';
+
+  @override
+  String get arabic => 'العربية';
+
+  @override
+  String languageChanged(Object language) {
+    return 'تم تغيير اللغة إلى $language';
+  }
+
+  @override
+  String themeChanged(Object theme) {
+    return 'تم تغيير المظهر إلى $theme';
+  }
+
+  @override
+  String get bookNow => 'احجز الآن';
+
+  @override
+  String get changeAvatar => 'تغيير الصورة الرمزية';
+
+  @override
+  String get chooseAvatarOption => 'اختر خيار الصورة الرمزية:';
+
+  @override
+  String get editPhoneNumber => 'تعديل رقم الهاتف';
+
+  @override
+  String get enterPhoneNumber => 'أدخل رقم هاتفك:';
+
+  @override
+  String get exploreProperties => 'استكشف العقارات';
+
+  @override
+  String get viewDetails => 'عرض التفاصيل';
+
+  @override
+  String get bookAgain => 'احجز مرة أخرى';
+
+  @override
+  String get passwordResetSuccess => 'تم إعادة تعيين كلمة المرور بنجاح!';
+
+  @override
+  String errorCreatingBooking(Object error) {
+    return 'خطأ في إنشاء الحجز: $error';
+  }
+
+  @override
+  String get termsOfService => 'شروط الخدمة';
+
+  @override
+  String get privacyPolicy => 'سياسة الخصوصية';
+
+  @override
+  String get legalInformation => 'المعلومات القانونية';
+
+  @override
+  String get topUp => 'شحن';
+
+  @override
+  String get withdraw => 'سحب';
+
+  @override
+  String get viewAll => 'عرض الكل';
+
+  @override
+  String transactionDetails(Object title) {
+    return 'المعاملة: $title';
+  }
+
+  @override
+  String get deleteAccount => 'حذف الحساب';
+
+  @override
+  String get accountDeletionRequested => 'تم طلب حذف الحساب';
+
+  @override
+  String get themeMode => 'وضع المظهر';
+
+  @override
+  String get welcomeToMaawa => 'مرحباً بك في معاوة';
+
+  @override
+  String get maawaDescription => 'معاوة هي منصتك الموثوقة لاكتشاف وحجز العقارات المذهلة. سواء كنت تبحث عن شقة دافئة، أو فيلا فاخرة، أو إقامة فريدة، نحن نربطك بالإقامة المثالية لاحتياجاتك.';
+
+  @override
+  String get features => 'الميزات';
+
+  @override
+  String get smartSearch => 'البحث الذكي';
+
+  @override
+  String get smartSearchDescription => 'ابحث عن العقارات مع المرشحات المتقدمة وتوصيات الذكاء الاصطناعي';
+
+  @override
+  String get secureBooking => 'الحجز الآمن';
+
+  @override
+  String get secureBookingDescription => 'معالجة دفع آمنة ومؤكدة مع تأكيد فوري';
+
+  @override
+  String get support247 => 'الدعم على مدار الساعة';
+
+  @override
+  String get support247Description => 'دعم العملاء على مدار الساعة لجميع احتياجاتك';
+
+  @override
+  String get verifiedProperties => 'العقارات المؤكدة';
+
+  @override
+  String get verifiedPropertiesDescription => 'جميع العقارات مؤكدة ومراجعة من فريقنا';
+
+  @override
+  String get contactUs => 'تواصل معنا';
+
+  @override
+  String get supportEmail => 'support@maawa.com';
+
+  @override
+  String get supportPhone => '+1 (555) 123-4567';
+
+  @override
+  String get supportWebsite => 'www.maawa.com';
+
+  @override
+  String get copyright => '© 2024 معاوة. جميع الحقوق محفوظة.';
+
+  @override
+  String get preferences => 'التفضيلات';
+
+  @override
+  String get manageNotifications => 'إدارة تفضيلات الإشعارات';
+
+  @override
+  String get locationServices => 'خدمات الموقع';
+
+  @override
+  String get locationServicesDescription => 'ساعدنا في العثور على العقارات القريبة منك';
+
+  @override
+  String get privacySecurity => 'الخصوصية والأمان';
+
+  @override
+  String get readPrivacyPolicy => 'اقرأ سياسة الخصوصية';
+
+  @override
+  String get readTermsOfService => 'اقرأ شروط الخدمة';
+
+  @override
+  String get changePassword => 'تغيير كلمة المرور';
+
+  @override
+  String get updateAccountPassword => 'تحديث كلمة مرور الحساب';
+
+  @override
+  String get deleteAccountDescription => 'حذف الحساب نهائياً';
+
+  @override
+  String get support => 'الدعم';
+
+  @override
+  String get helpCenter => 'مركز المساعدة';
+
+  @override
+  String get getHelpSupport => 'احصل على المساعدة والدعم';
+
+  @override
+  String get sendFeedback => 'إرسال ملاحظات';
+
+  @override
+  String get helpUsImprove => 'ساعدنا في تحسين التطبيق';
+
+  @override
+  String get rateApp => 'قيّم التطبيق';
+
+  @override
+  String get rateOnAppStore => 'قيّمنا على متجر التطبيقات';
+
+  @override
+  String get developer => 'المطور';
+
+  @override
+  String get styleGuideDevTools => 'دليل الأنماط وأدوات التطوير';
+
+  @override
+  String get appVersionInfo => 'إصدار التطبيق والمعلومات';
+
+  @override
+  String get version => 'الإصدار 1.0.0';
+
+  @override
+  String get currentSettings => 'الإعدادات الحالية';
+
+  @override
+  String get preview => 'معاينة';
+
+  @override
+  String get designSystem => 'نظام التصميم';
+
+  @override
+  String get componentLibrary => 'مكتبة المكونات ورموز التصميم';
+
+  @override
+  String get themePreview => 'معاينة المظهر';
+
+  @override
+  String get previewLightDark => 'معاينة المظاهر الفاتح والداكن';
+
+  @override
+  String get debugTools => 'أدوات التصحيح';
+
+  @override
+  String get testOverflowScenarios => 'اختبار سيناريوهات الفائض وتكبير النص';
+
+  @override
+  String get routeInspector => 'مفتش المسارات';
+
+  @override
+  String get viewRouteDetails => 'عرض تفاصيل المسار الحالي ونسخ الروابط';
+
+  @override
+  String get navigationTesting => 'اختبار التنقل';
+
+  @override
+  String get testTenantNavigation => 'اختبار تدفق تنقل المستأجر';
+
+  @override
+  String get testOwnerManagement => 'اختبار إدارة عقارات المالك';
+
+  @override
+  String get testAdminDashboard => 'اختبار لوحة تحكم المدير';
+
+  @override
+  String get debugInformation => 'معلومات التصحيح';
+
+  @override
+  String get appVersion => 'إصدار التطبيق';
+
+  @override
+  String get flutterVersion => 'إصدار Flutter';
+
+  @override
+  String get buildMode => 'وضع البناء';
+
+  @override
+  String get platform => 'المنصة';
+
+  @override
+  String get networkConfiguration => 'تكوين الشبكة';
+
+  @override
+  String get baseUrl => 'الرابط الأساسي';
+
+  @override
+  String get networkStatus => 'حالة الشبكة';
+
+  @override
+  String get apiVersion => 'إصدار API';
+
+  @override
+  String get environment => 'البيئة';
+
+  @override
+  String get switchBetweenRoles => 'تبديل بين أدوار المستخدمين المختلفة لاختبار تباينات واجهة المستخدم';
+
+  @override
+  String get current => 'الحالي';
+
+  @override
+  String get confirmDeleteAccount => 'هل أنت متأكد من أنك تريد حذف حسابك؟ لا يمكن التراجع عن هذا الإجراء وستتم إزالة جميع بياناتك نهائياً.';
+
+  @override
+  String get logoutConfirmation => 'هل أنت متأكد من أنك تريد تسجيل الخروج؟';
 }

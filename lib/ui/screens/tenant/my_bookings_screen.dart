@@ -31,7 +31,6 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -58,7 +57,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
 
   Widget _buildBookingsList(String type) {
     final bookings = _getBookingsForType(type);
-    
+
     if (bookings.isEmpty) {
       return _buildEmptyState(type);
     }
@@ -72,27 +71,27 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
 
   Widget _buildEmptyState(String type) {
     final theme = Theme.of(context);
-    
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
-            type == 'upcoming' ? Icons.calendar_today : 
-            type == 'past' ? Icons.history : Icons.cancel,
+            type == 'upcoming'
+                ? Icons.calendar_today
+                : type == 'past'
+                ? Icons.history
+                : Icons.cancel,
             size: 80,
             color: theme.colorScheme.onSurfaceVariant,
           ),
           SizedBox(height: Spacing.lg),
-          Text(
-            'No ${type} bookings',
-            style: theme.textTheme.headlineSmall,
-          ),
+          Text('No $type bookings', style: theme.textTheme.headlineSmall),
           SizedBox(height: Spacing.sm),
           Text(
-            type == 'upcoming' 
-              ? 'Your upcoming stays will appear here'
-              : type == 'past'
+            type == 'upcoming'
+                ? 'Your upcoming stays will appear here'
+                : type == 'past'
                 ? 'Your past stays will appear here'
                 : 'Your cancelled bookings will appear here',
             style: theme.textTheme.bodyLarge,
@@ -112,7 +111,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
 
   Widget _buildBookingCard(Map<String, dynamic> booking) {
     final theme = Theme.of(context);
-    
+
     return Card(
       margin: EdgeInsets.only(bottom: Spacing.md),
       child: InkWell(
@@ -129,8 +128,10 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
                     width: 60,
                     height: 60,
                     decoration: BoxDecoration(
-                      color: theme.colorScheme.surfaceVariant,
-                      borderRadius: BorderRadius.circular(BorderRadiusTokens.small),
+                      color: theme.colorScheme.surfaceContainerHighest,
+                      borderRadius: BorderRadius.circular(
+                        BorderRadiusTokens.small,
+                      ),
                     ),
                     child: Icon(
                       Icons.image,
@@ -162,7 +163,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
                 ],
               ),
               SizedBox(height: Spacing.md),
-              
+
               Row(
                 children: [
                   Icon(Icons.people_outline, size: 16),
@@ -181,7 +182,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
                   ),
                 ],
               ),
-              
+
               if (booking['status'] == 'upcoming') ...[
                 SizedBox(height: Spacing.md),
                 Row(
@@ -195,7 +196,8 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
                     ),
                     SizedBox(width: Spacing.sm),
                     ElevatedButton(
-                      onPressed: () => AppRouter.goToBookingDetails(context, booking['id']),
+                      onPressed: () =>
+                          AppRouter.goToBookingDetails(context, booking['id']),
                       child: const Text('View Details'),
                     ),
                   ],
@@ -231,7 +233,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
   Widget _buildStatusChip(String status) {
     Color backgroundColor;
     Color foregroundColor;
-    
+
     switch (status) {
       case 'upcoming':
         backgroundColor = AppColors.primary100;

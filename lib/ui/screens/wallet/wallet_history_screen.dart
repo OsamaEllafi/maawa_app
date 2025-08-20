@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'dart:async'; // Added for Timer
 import '../../../core/theme/app_theme.dart';
-import '../../../app/navigation/tab_roots.dart';
+import '../../../demo/demo_data.dart';
+import '../../widgets/common/app_top_bar.dart';
+import '../../widgets/wallet/transaction_item.dart';
 
 /// Wallet history screen showing all transactions
 class WalletHistoryScreen extends StatefulWidget {
@@ -10,150 +13,173 @@ class WalletHistoryScreen extends StatefulWidget {
   State<WalletHistoryScreen> createState() => _WalletHistoryScreenState();
 }
 
-class _WalletHistoryScreenState extends State<WalletHistoryScreen>
-    with TickerProviderStateMixin {
-  late TabController _tabController;
+class _WalletHistoryScreenState extends State<WalletHistoryScreen> {
+  bool _isLoading = true;
+  String _selectedFilter = 'all';
+  Timer? _debounceTimer;
+
+  final List<String> _filters = ['all', 'topup', 'withdrawal', 'booking', 'adjustment'];
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 4, vsync: this);
+    _loadTransactions();
   }
 
   @override
   void dispose() {
-    _tabController.dispose();
+    _debounceTimer?.cancel();
     super.dispose();
+  }
+
+  void _loadTransactions() async {
+    // Simulate loading delay
+    await Future.delayed(const Duration(milliseconds: 400));
+    if (mounted) {
+      setState(() => _isLoading = false);
+    }
+  }
+
+  void _onFilterChanged(String filter) {
+    // Debounce filter changes to prevent skeleton/content overlap
+    _debounceTimer?.cancel();
+    _debounceTimer = Timer(const Duration(milliseconds: 300), () {
+      if (mounted) {
+        setState(() {
+          _selectedFilter = filter;
+          _isLoading = true;
+        });
+        _loadTransactions();
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        leading: buildBackLeading(context), // Use centralized helper
-        title: const Text('Transaction History'),
-        bottom: TabBar(
-          controller: _tabController,
-          isScrollable: true,
-          tabs: const [
-            Tab(text: 'All'),
-            Tab(text: 'Top-ups'),
-            Tab(text: 'Withdrawals'),
-            Tab(text: 'Bookings'),
-          ],
-        ),
+      appBar: AppTopBar(
+        title: 'Transaction History',
       ),
-      body: TabBarView(
-        controller: _tabController,
+      body: Column(
         children: [
-          _buildTransactionsList('all'),
-          _buildTransactionsList('topup'),
-          _buildTransactionsList('withdrawal'),
-          _buildTransactionsList('booking'),
+          // Filter chips
+          Container(
+            padding: EdgeInsets.all(Spacing.md),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: _filters.map((filter) {
+                  final isSelected = _selectedFilter == filter;
+                  return Padding(
+                    padding: EdgeInsets.only(right: Spacing.sm),
+                    child: FilterChip(
+                      label: Text(_getFilterLabel(filter)),
+                      selected: isSelected,
+                      onSelected: (selected) {
+                        if (selected) {
+                          _onFilterChanged(filter);
+                        }
+                      },
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+          ),
+
+          // Transaction list
+          Expanded(
+            child: _isLoading
+                ? _buildSkeletonList()
+                : _buildTransactionList(),
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildTransactionsList(String filter) {
-    final transactions = _getFilteredTransactions(filter);
-
+  Widget _buildSkeletonList() {
     return ListView.builder(
       padding: EdgeInsets.all(Spacing.md),
-      itemCount: transactions.length,
-      itemBuilder: (context, index) =>
-          _buildTransactionItem(transactions[index]),
+      itemCount: 10,
+      itemBuilder: (context, index) => _buildSkeletonItem(),
     );
   }
 
-  Widget _buildTransactionItem(Map<String, dynamic> transaction) {
+  Widget _buildSkeletonItem() {
     final theme = Theme.of(context);
-
     return Card(
       margin: EdgeInsets.only(bottom: Spacing.sm),
       child: Padding(
         padding: EdgeInsets.all(Spacing.md),
         child: Row(
           children: [
+            // Icon skeleton
             Container(
-              padding: EdgeInsets.all(Spacing.sm),
+              width: 48,
+              height: 48,
               decoration: BoxDecoration(
-                color: (transaction['color'] as Color).withOpacity(0.1),
-                borderRadius: BorderRadius.circular(BorderRadiusTokens.small),
-              ),
-              child: Icon(
-                transaction['icon'] as IconData,
-                color: transaction['color'] as Color,
-                size: 24,
+                color: theme.colorScheme.surfaceContainerHighest,
+                borderRadius: BorderRadius.circular(BorderRadiusTokens.medium),
               ),
             ),
             SizedBox(width: Spacing.md),
+            // Content skeleton
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    transaction['title'] as String,
-                    style: theme.textTheme.titleSmall,
-                  ),
-                  Text(
-                    transaction['subtitle'] as String,
-                    style: theme.textTheme.bodySmall,
+                  Container(
+                    height: 16,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.surfaceContainerHighest,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
                   ),
                   SizedBox(height: Spacing.xs),
-                  Row(
-                    children: [
-                      Text(
-                        transaction['date'] as String,
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                      SizedBox(width: Spacing.sm),
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: Spacing.xs,
-                          vertical: 2,
-                        ),
-                        decoration: BoxDecoration(
-                          color: _getStatusColor(
-                            transaction['status'],
-                          ).withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(
-                            BorderRadiusTokens.small,
-                          ),
-                        ),
-                        child: Text(
-                          transaction['status'] as String,
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: _getStatusColor(transaction['status']),
-                            fontSize: 10,
-                          ),
-                        ),
-                      ),
-                    ],
+                  Container(
+                    height: 14,
+                    width: 120,
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.surfaceContainerHighest,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                  SizedBox(height: Spacing.xs),
+                  Container(
+                    height: 12,
+                    width: 80,
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.surfaceContainerHighest,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
                   ),
                 ],
               ),
             ),
+            // Amount skeleton
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Text(
-                  transaction['amount'] as String,
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    color: transaction['color'] as Color,
-                    fontWeight: FontWeight.bold,
+                Container(
+                  height: 16,
+                  width: 80,
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.surfaceContainerHighest,
+                    borderRadius: BorderRadius.circular(4),
                   ),
                 ),
-                if (transaction['fee'] != null)
-                  Text(
-                    'Fee: ${transaction['fee']}',
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: theme.colorScheme.onSurfaceVariant,
-                    ),
+                SizedBox(height: Spacing.xs),
+                Container(
+                  height: 12,
+                  width: 60,
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.surfaceContainerHighest,
+                    borderRadius: BorderRadius.circular(4),
                   ),
+                ),
               ],
             ),
           ],
@@ -162,120 +188,102 @@ class _WalletHistoryScreenState extends State<WalletHistoryScreen>
     );
   }
 
-  Color _getStatusColor(String status) {
-    switch (status) {
-      case 'completed':
-        return AppColors.success500;
-      case 'pending':
-        return AppColors.warning500;
-      case 'failed':
-        return AppColors.error500;
+  Widget _buildTransactionList() {
+    final filteredTransactions = _getFilteredTransactions();
+
+    if (filteredTransactions.isEmpty) {
+      return _buildEmptyState();
+    }
+
+    return ListView.builder(
+      padding: EdgeInsets.all(Spacing.md),
+      itemCount: filteredTransactions.length,
+      itemBuilder: (context, index) {
+        final transaction = filteredTransactions[index];
+        return TransactionItem(
+          transaction: transaction,
+          onTap: () {
+            // Could navigate to transaction detail in the future
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Transaction: ${transaction.title}'),
+                duration: const Duration(seconds: 2),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildEmptyState() {
+    final theme = Theme.of(context);
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.receipt_long,
+            size: 64,
+            color: theme.colorScheme.onSurfaceVariant,
+          ),
+          SizedBox(height: Spacing.md),
+          Text(
+            'No transactions found',
+            style: theme.textTheme.titleMedium?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+          ),
+          SizedBox(height: Spacing.sm),
+          Text(
+            'Your transaction history will appear here',
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  List<DemoTransaction> _getFilteredTransactions() {
+    if (_selectedFilter == 'all') {
+      return DemoData.transactions;
+    }
+
+    final filterType = _getFilterType(_selectedFilter);
+    return DemoData.filteredTransactions(filterType);
+  }
+
+  String _getFilterLabel(String filter) {
+    switch (filter) {
+      case 'all':
+        return 'All';
+      case 'topup':
+        return 'Top-ups';
+      case 'withdrawal':
+        return 'Withdrawals';
+      case 'booking':
+        return 'Bookings';
+      case 'adjustment':
+        return 'Adjustments';
       default:
-        return AppColors.surface500;
+        return 'All';
     }
   }
 
-  List<Map<String, dynamic>> _getFilteredTransactions(String filter) {
-    final allTransactions = [
-      {
-        'type': 'booking',
-        'title': 'Booking Payment',
-        'subtitle': 'Downtown Apartment - Booking #BK123',
-        'amount': '-\$450.00',
-        'date': 'Dec 20, 2024',
-        'status': 'completed',
-        'icon': Icons.home,
-        'color': AppColors.error500,
-      },
-      {
-        'type': 'topup',
-        'title': 'Wallet Top-up',
-        'subtitle': 'Credit Card ****1234',
-        'amount': '+\$500.00',
-        'fee': '\$14.50',
-        'date': 'Dec 15, 2024',
-        'status': 'completed',
-        'icon': Icons.add_circle,
-        'color': AppColors.success500,
-      },
-      {
-        'type': 'withdrawal',
-        'title': 'Bank Withdrawal',
-        'subtitle': 'Bank of America ****5678',
-        'amount': '-\$300.00',
-        'date': 'Dec 10, 2024',
-        'status': 'pending',
-        'icon': Icons.remove_circle,
-        'color': AppColors.error500,
-      },
-      {
-        'type': 'booking',
-        'title': 'Booking Refund',
-        'subtitle': 'Cancelled booking - Beach Villa',
-        'amount': '+\$200.00',
-        'date': 'Dec 5, 2024',
-        'status': 'completed',
-        'icon': Icons.undo,
-        'color': AppColors.success500,
-      },
-      {
-        'type': 'topup',
-        'title': 'PayPal Top-up',
-        'subtitle': 'user@example.com',
-        'amount': '+\$100.00',
-        'date': 'Dec 1, 2024',
-        'status': 'completed',
-        'icon': Icons.add_circle,
-        'color': AppColors.success500,
-      },
-      {
-        'type': 'booking',
-        'title': 'Service Fee',
-        'subtitle': 'Monthly maintenance fee',
-        'amount': '-\$5.00',
-        'date': 'Nov 30, 2024',
-        'status': 'completed',
-        'icon': Icons.receipt,
-        'color': AppColors.error500,
-      },
-      {
-        'type': 'referral',
-        'title': 'Referral Bonus',
-        'subtitle': 'Friend Sarah joined Maawa',
-        'amount': '+\$25.00',
-        'date': 'Nov 25, 2024',
-        'status': 'completed',
-        'icon': Icons.people,
-        'color': AppColors.success500,
-      },
-      {
-        'type': 'withdrawal',
-        'title': 'Failed Withdrawal',
-        'subtitle': 'Insufficient bank account info',
-        'amount': '-\$150.00',
-        'date': 'Nov 20, 2024',
-        'status': 'failed',
-        'icon': Icons.error,
-        'color': AppColors.error500,
-      },
-    ];
-
-    if (filter == 'all') {
-      return allTransactions;
+  DemoTransactionType? _getFilterType(String filter) {
+    switch (filter) {
+      case 'topup':
+        return DemoTransactionType.topup;
+      case 'withdrawal':
+        return DemoTransactionType.withdrawal;
+      case 'booking':
+        return DemoTransactionType.booking;
+      case 'adjustment':
+        return DemoTransactionType.adjustment;
+      default:
+        return null;
     }
-
-    return allTransactions.where((transaction) {
-      switch (filter) {
-        case 'topup':
-          return transaction['type'] == 'topup';
-        case 'withdrawal':
-          return transaction['type'] == 'withdrawal';
-        case 'booking':
-          return transaction['type'] == 'booking' ||
-              transaction['type'] == 'referral';
-        default:
-          return true;
-      }
-    }).toList();
   }
 }

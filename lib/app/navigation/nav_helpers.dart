@@ -36,7 +36,7 @@ class NavHelpers {
   static void goToBookingRequest(BuildContext context, String propertyId) {
     context.pushNamed(
       AppRouter.bookingRequest,
-      queryParameters: {'propertyId': propertyId},
+      pathParameters: {'id': propertyId},
     );
   }
 

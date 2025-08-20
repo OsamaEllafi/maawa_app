@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import '../../../l10n/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../app/navigation/app_router.dart';
 
@@ -22,7 +20,6 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
 
     return Scaffold(
@@ -34,7 +31,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
               background: Container(
-                color: theme.colorScheme.surfaceVariant,
+                color: theme.colorScheme.surfaceContainerHighest,
                 child: Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,

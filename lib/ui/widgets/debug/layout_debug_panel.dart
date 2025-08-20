@@ -24,7 +24,7 @@ class _LayoutDebugPanelState extends State<LayoutDebugPanel> {
       ),
       body: MediaQuery(
         data: MediaQuery.of(context).copyWith(
-          textScaleFactor: _textScaleFactor,
+          textScaler: TextScaler.linear(_textScaleFactor),
         ),
         child: SingleChildScrollView(
           padding: EdgeInsets.all(Spacing.lg),

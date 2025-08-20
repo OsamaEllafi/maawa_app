@@ -38,18 +38,14 @@ class SettingsScreen extends StatelessWidget {
                   icon: Icons.language_outlined,
                   title: l10n.language,
                   subtitle: 'English',
-                  onTap: () {
-                    // TODO: Show language picker
-                  },
+                  onTap: () => context.pushNamed(AppRouter.languageThemeSettings),
                 ),
                 _buildListItem(
                   context,
                   icon: Icons.dark_mode_outlined,
                   title: l10n.theme,
                   subtitle: 'System default',
-                  onTap: () {
-                    // TODO: Show theme picker
-                  },
+                  onTap: () => context.pushNamed(AppRouter.languageThemeSettings),
                 ),
                 _buildListItem(
                   context,

@@ -80,7 +80,7 @@ class AdminDashboardScreen extends StatelessWidget {
                 children: [
                   ListTile(
                     leading: const Icon(Icons.people),
-                    title: const Text('Manage Users'),
+                    title: Text(l10n.manageUsers),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () {
                       // TODO: Navigate to user management
@@ -89,7 +89,7 @@ class AdminDashboardScreen extends StatelessWidget {
                   const Divider(height: 1),
                   ListTile(
                     leading: const Icon(Icons.home),
-                    title: const Text('Manage Properties'),
+                    title: Text(l10n.manageProperties),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () {
                       // TODO: Navigate to property management
@@ -98,7 +98,7 @@ class AdminDashboardScreen extends StatelessWidget {
                   const Divider(height: 1),
                   ListTile(
                     leading: const Icon(Icons.account_balance_wallet),
-                    title: const Text('Wallet Adjustments'),
+                    title: Text(l10n.walletAdjustments),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () {
                       // TODO: Navigate to wallet adjustments

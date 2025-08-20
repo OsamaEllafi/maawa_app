@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../../l10n/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/utils/currency_formatter.dart';
+import '../../../demo/demo_data.dart';
 import '../../widgets/common/app_top_bar.dart';
 
 /// Wallet top-up screen for adding funds
@@ -28,13 +29,10 @@ class _WalletTopupScreenState extends State<WalletTopupScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppTopBar(
-        title: 'Top Up Wallet',
-      ),
+      appBar: AppTopBar(title: 'Top Up Wallet'),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(Spacing.md),
         child: Column(
@@ -46,14 +44,27 @@ class _WalletTopupScreenState extends State<WalletTopupScreen> {
                 padding: EdgeInsets.all(Spacing.md),
                 child: Row(
                   children: [
-                    Icon(Icons.account_balance_wallet, color: theme.colorScheme.primary),
+                    Icon(
+                      Icons.account_balance_wallet,
+                      color: theme.colorScheme.primary,
+                    ),
                     SizedBox(width: Spacing.md),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Current Balance', style: theme.textTheme.bodyMedium),
-                        Text('\$2,450.00', style: theme.textTheme.titleLarge),
-                      ],
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Current Balance',
+                            style: theme.textTheme.bodyMedium,
+                          ),
+                          Text(
+                            CurrencyFormatter.formatLYD(DemoData.walletBalance),
+                            style: theme.textTheme.titleLarge,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -70,7 +81,7 @@ class _WalletTopupScreenState extends State<WalletTopupScreen> {
               children: _quickAmounts.map((amount) {
                 final isSelected = _selectedAmount == amount;
                 return ChoiceChip(
-                  label: Text('\$${amount.toInt()}'),
+                  label: Text(CurrencyFormatter.formatLYD(amount)),
                   selected: isSelected,
                   onSelected: (selected) {
                     if (selected) {
@@ -90,7 +101,7 @@ class _WalletTopupScreenState extends State<WalletTopupScreen> {
               controller: _customAmountController,
               decoration: InputDecoration(
                 labelText: 'Custom Amount',
-                prefixText: '\$ ',
+                prefixText: '${CurrencyFormatter.symbol} ',
                 border: const OutlineInputBorder(),
               ),
               keyboardType: TextInputType.number,
@@ -106,131 +117,246 @@ class _WalletTopupScreenState extends State<WalletTopupScreen> {
             // Payment method
             Text('Payment Method', style: theme.textTheme.titleLarge),
             SizedBox(height: Spacing.md),
-            
-            RadioListTile<String>(
-              title: Row(
+            Card(
+              child: Column(
                 children: [
-                  Icon(Icons.credit_card),
-                  SizedBox(width: Spacing.sm),
-                  const Text('Credit/Debit Card'),
+                  RadioListTile<String>(
+                    title: Row(
+                      children: [
+                        Icon(
+                          Icons.credit_card,
+                          color: theme.colorScheme.primary,
+                        ),
+                        SizedBox(width: Spacing.sm),
+                        Text('Credit/Debit Card'),
+                      ],
+                    ),
+                    subtitle: Text('Visa, Mastercard, American Express'),
+                    value: 'card',
+                    groupValue: _selectedPaymentMethod,
+                    onChanged: (value) {
+                      setState(() => _selectedPaymentMethod = value!);
+                    },
+                  ),
+                  Divider(height: 1),
+                  RadioListTile<String>(
+                    title: Row(
+                      children: [
+                        Icon(
+                          Icons.account_balance,
+                          color: theme.colorScheme.primary,
+                        ),
+                        SizedBox(width: Spacing.sm),
+                        Text('Bank Transfer'),
+                      ],
+                    ),
+                    subtitle: Text('Direct bank transfer'),
+                    value: 'bank',
+                    groupValue: _selectedPaymentMethod,
+                    onChanged: (value) {
+                      setState(() => _selectedPaymentMethod = value!);
+                    },
+                  ),
                 ],
               ),
-              subtitle: const Text('****1234'),
-              value: 'card',
-              groupValue: _selectedPaymentMethod,
-              onChanged: (value) => setState(() => _selectedPaymentMethod = value!),
             ),
-            
-            RadioListTile<String>(
-              title: Row(
-                children: [
-                  Icon(Icons.account_balance),
-                  SizedBox(width: Spacing.sm),
-                  const Text('Bank Transfer'),
-                ],
-              ),
-              subtitle: const Text('Bank of America ****5678'),
-              value: 'bank',
-              groupValue: _selectedPaymentMethod,
-              onChanged: (value) => setState(() => _selectedPaymentMethod = value!),
-            ),
-            
-            RadioListTile<String>(
-              title: Row(
-                children: [
-                  Icon(Icons.payment),
-                  SizedBox(width: Spacing.sm),
-                  const Text('PayPal'),
-                ],
-              ),
-              subtitle: const Text('user@example.com'),
-              value: 'paypal',
-              groupValue: _selectedPaymentMethod,
-              onChanged: (value) => setState(() => _selectedPaymentMethod = value!),
-            ),
-            SizedBox(height: Spacing.lg),
+            SizedBox(height: Spacing.xl),
 
             // Summary
             Card(
               child: Padding(
                 padding: EdgeInsets.all(Spacing.md),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Summary', style: theme.textTheme.titleMedium),
-                    SizedBox(height: Spacing.md),
-                    _buildSummaryRow('Amount', '\$${_selectedAmount.toStringAsFixed(2)}'),
-                    _buildSummaryRow('Processing Fee', '\$${(_selectedAmount * 0.029).toStringAsFixed(2)}'),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Amount', style: theme.textTheme.bodyMedium),
+                        Text(
+                          CurrencyFormatter.formatLYD(_selectedAmount),
+                          style: theme.textTheme.titleMedium,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: Spacing.sm),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Fee', style: theme.textTheme.bodyMedium),
+                        Text(
+                          CurrencyFormatter.formatLYD(0),
+                          style: theme.textTheme.bodyMedium,
+                        ),
+                      ],
+                    ),
                     Divider(),
-                    _buildSummaryRow(
-                      'Total', 
-                      '\$${(_selectedAmount + (_selectedAmount * 0.029)).toStringAsFixed(2)}',
-                      isTotal: true,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Total', style: theme.textTheme.titleMedium),
+                        Text(
+                          CurrencyFormatter.formatLYD(_selectedAmount),
+                          style: theme.textTheme.titleLarge?.copyWith(
+                            color: theme.colorScheme.primary,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
               ),
             ),
+            SizedBox(height: Spacing.lg),
+
+            // Submit button
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: _canSubmit() && !_isLoading ? _processTopup : null,
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(vertical: Spacing.md),
+                  backgroundColor: theme.colorScheme.primary,
+                  foregroundColor: theme.colorScheme.onPrimary,
+                ),
+                child: _isLoading
+                    ? SizedBox(
+                        height: 24,
+                        width: 24,
+                        child: CircularProgressIndicator(
+                          color: theme.colorScheme.onPrimary,
+                          strokeWidth: 2,
+                        ),
+                      )
+                    : Text(
+                        'Top Up ${CurrencyFormatter.formatLYD(_selectedAmount)}',
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          color: theme.colorScheme.onPrimary,
+                        ),
+                      ),
+              ),
+            ),
           ],
-        ),
-      ),
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.all(Spacing.md),
-        child: SafeArea(
-          child: ElevatedButton(
-            onPressed: _selectedAmount > 0 && !_isLoading ? _processTopUp : null,
-            child: _isLoading
-                ? const CircularProgressIndicator()
-                : Text('Add \$${_selectedAmount.toStringAsFixed(2)}'),
-          ),
         ),
       ),
     );
   }
 
-  Widget _buildSummaryRow(String label, String amount, {bool isTotal = false}) {
-    final theme = Theme.of(context);
-    final style = isTotal 
-        ? theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)
-        : theme.textTheme.bodyMedium;
+  bool _canSubmit() {
+    return _selectedAmount > 0;
+  }
 
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: Spacing.xs),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(label, style: style),
-          Text(amount, style: style),
+  void _processTopup() async {
+    if (!_canSubmit()) return;
+
+    setState(() => _isLoading = true);
+
+    // Show mock processing dialog
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        title: Row(
+          children: [
+            SizedBox(
+              width: 24,
+              height: 24,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
+            SizedBox(width: Spacing.md),
+            Text('Processing...'),
+          ],
+        ),
+        content: Text('Please wait while we process your top-up request.'),
+      ),
+    );
+
+    // Simulate processing delay
+    await Future.delayed(const Duration(milliseconds: 700));
+
+    if (!mounted) return;
+
+    // Close processing dialog
+    Navigator.of(context).pop();
+
+    setState(() => _isLoading = false);
+
+    // Simulate success/failure (90% success rate for demo)
+    final isSuccess = DateTime.now().millisecond % 10 != 0;
+
+    if (isSuccess) {
+      // Add transaction to demo data
+      final newTransaction = DemoTransaction(
+        id: 'txn_${DateTime.now().millisecondsSinceEpoch}',
+        type: DemoTransactionType.topup,
+        title: 'Wallet Top-up',
+        subtitle: _selectedPaymentMethod == 'card'
+            ? 'Credit Card'
+            : 'Bank Transfer',
+        amount: _selectedAmount,
+        date: DateTime.now(),
+        status: DemoTransactionStatus.completed,
+      );
+
+      DemoData.addTransaction(newTransaction);
+
+      _showSuccessDialog();
+    } else {
+      _showFailureDialog();
+    }
+  }
+
+  void _showSuccessDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Row(
+          children: [
+            Icon(Icons.check_circle, color: AppColors.success500),
+            SizedBox(width: Spacing.sm),
+            Text('Top-up Successful'),
+          ],
+        ),
+        content: Text(
+          'Your wallet has been topped up with ${CurrencyFormatter.formatLYD(_selectedAmount)}.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              context.pop();
+            },
+            child: Text('OK'),
+          ),
         ],
       ),
     );
   }
 
-  void _processTopUp() {
-    setState(() => _isLoading = true);
-    
-    // Simulate payment processing
-    Future.delayed(const Duration(seconds: 2), () {
-      if (mounted) {
-        setState(() => _isLoading = false);
-        
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: const Text('Top-up Successful'),
-            content: Text('Your wallet has been topped up with \$${_selectedAmount.toStringAsFixed(2)}'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  context.pop(); // Close dialog
-                  context.pop(); // Go back to wallet
-                },
-                child: const Text('OK'),
-              ),
-            ],
+  void _showFailureDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Row(
+          children: [
+            Icon(Icons.error, color: AppColors.error500),
+            SizedBox(width: Spacing.sm),
+            Text('Top-up Failed'),
+          ],
+        ),
+        content: Text(
+          'Unable to process your top-up request. Please try again or contact support.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text('Try Again'),
           ),
-        );
-      }
-    });
+        ],
+      ),
+    );
   }
 }

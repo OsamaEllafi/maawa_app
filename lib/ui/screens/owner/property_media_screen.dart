@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../../l10n/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../widgets/common/app_top_bar.dart';
 
@@ -11,7 +10,6 @@ class PropertyMediaScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
 
     return Scaffold(

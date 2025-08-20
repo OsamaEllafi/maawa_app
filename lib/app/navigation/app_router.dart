@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../models/user_role.dart';
+import '../../core/utils/page_transitions.dart';
 
 import '../../ui/screens/not_found_screen.dart';
 import '../../ui/layouts/main_scaffold.dart';
@@ -14,7 +15,7 @@ import '../../ui/screens/home/home_screen.dart';
 import '../../ui/screens/properties/property_detail_screen.dart';
 import '../../ui/screens/tenant/my_bookings_screen.dart';
 import '../../ui/screens/booking/booking_request_screen.dart';
-import '../../ui/screens/booking/booking_details_screen.dart';
+import '../../ui/screens/bookings/booking_detail_screen.dart';
 import '../../ui/screens/wallet/wallet_screen.dart';
 import '../../ui/screens/wallet/wallet_topup_screen.dart';
 import '../../ui/screens/wallet/wallet_withdraw_screen.dart';
@@ -32,13 +33,14 @@ import '../../ui/screens/admin/admin_mock_emails_screen.dart';
 import '../../ui/screens/profile/profile_screen.dart';
 import '../../ui/screens/profile/kyc_screen.dart';
 import '../../ui/screens/settings/settings_screen.dart';
+import '../../ui/screens/settings/language_theme_settings.dart';
 import '../../ui/screens/settings/dev_tools_screen.dart';
 import '../../ui/screens/about/about_screen.dart';
 import '../../ui/screens/style_guide_screen.dart';
 import '../../demo/demo_data.dart';
 
 /// Route constants and documentation
-/// 
+///
 /// Path patterns and parameters:
 /// - /: Root route (redirects to /tenant/home)
 /// - /style-guide: Style guide screen for component preview
@@ -65,17 +67,17 @@ import '../../demo/demo_data.dart';
 /// - /admin/property/:id: Admin property details (id: property ID)
 /// - /admin/bookings: Admin bookings management
 /// - /admin/booking/:id: Admin booking details (id: booking ID)
-/// 
+///
 /// Dynamic route parameters:
 /// - :id: Used for property, booking, and user IDs
 ///   - Should be valid UUID or numeric ID
 ///   - Invalid IDs show empty state, not 404
-/// 
+///
 /// Shell routes:
 /// - Tenant shell: /tenant/* with bottom navigation
 /// - Owner shell: /owner/* with side navigation
 /// - Admin shell: /admin/* with side navigation
-/// 
+///
 /// Error handling:
 /// - Unknown routes: Redirect to NotFoundScreen
 /// - Invalid parameters: Show empty state with retry option
@@ -95,15 +97,17 @@ class AppRouter {
   static const String tenantProperties = '/tenant/properties';
   static const String tenantProperty = '/tenant/property';
   static const String booking = '/booking';
+  static const String bookingDetail = 'bookingDetail';
   static const String myBookings = '/bookings/my';
   static const String bookingRequest = '/bookings/request';
-  static const String wallet = '/wallet';
-  static const String walletTopup = '/wallet/topup';
-  static const String walletWithdraw = '/wallet/withdraw';
-  static const String walletHistory = '/wallet/history';
-  static const String profile = '/profile';
+  static const String wallet = 'wallet';
+  static const String walletTopup = 'walletTopup';
+  static const String walletWithdraw = 'walletWithdraw';
+  static const String walletHistory = 'walletHistory';
+  static const String profile = 'profile';
   static const String kyc = '/profile/kyc';
   static const String settings = '/settings';
+  static const String languageThemeSettings = '/settings/language-theme';
   static const String devTools = '/settings/dev-tools';
   static const String about = '/settings/about';
   static const String ownerProperties = '/owner/properties';
@@ -142,16 +146,19 @@ class AppRouter {
           // Strip all trailing slashes
           String canonicalPath = uri.path;
           while (canonicalPath.endsWith('/') && canonicalPath != '/') {
-            canonicalPath = canonicalPath.substring(0, canonicalPath.length - 1);
+            canonicalPath = canonicalPath.substring(
+              0,
+              canonicalPath.length - 1,
+            );
           }
           final canonicalUri = uri.replace(path: canonicalPath);
           final canonicalLocation = canonicalUri.toString();
-          
+
           // Short-circuit if canonical path equals current path to avoid loops
           if (canonicalLocation == location) {
             return null;
           }
-          
+
           return canonicalLocation;
         }
         return null; // No redirect needed
@@ -188,10 +195,7 @@ class AppRouter {
           builder: (context, state, child) => MainScaffold(child: child),
           routes: [
             // Root route (redirects to tenant home)
-            GoRoute(
-              path: root,
-              redirect: (context, state) => tenantHome,
-            ),
+            GoRoute(path: root, redirect: (context, state) => tenantHome),
 
             // Style guide route
             GoRoute(
@@ -208,17 +212,21 @@ class AppRouter {
             GoRoute(
               path: tenantHome,
               name: 'tenantHome',
-              builder: (context, state) => const HomeScreen(),
+              pageBuilder: (context, state) => PageTransitions.none(
+                child: const HomeScreen(),
+              ),
             ),
             GoRoute(
               path: tenantProperties,
-              builder: (context, state) => const OwnerPropertiesScreen(), // Assuming tenant home is also owner properties for now
+              pageBuilder: (context, state) => PageTransitions.none(
+                child: const OwnerPropertiesScreen(), // Assuming tenant home is also owner properties for now
+              ),
             ),
             GoRoute(
               path: '$tenantProperty/:id',
               name: 'propertyDetails',
-              builder: (context, state) => PropertyDetailScreen(
-                propertyId: state.pathParameters['id']!,
+              pageBuilder: (context, state) => PageTransitions.emphasized(
+                child: PropertyDetailScreen(propertyId: state.pathParameters['id']!),
               ),
             ),
 
@@ -226,38 +234,75 @@ class AppRouter {
             GoRoute(
               path: myBookings,
               name: 'myBookings',
-              builder: (context, state) => const MyBookingsScreen(),
+              pageBuilder: (context, state) => PageTransitions.none(
+                child: const MyBookingsScreen(),
+              ),
             ),
             GoRoute(
-              path: bookingRequest,
+              path: '$bookingRequest/:id',
               name: 'bookingRequest',
-              builder: (context, state) => BookingRequestScreen(
-                propertyId: state.uri.queryParameters['propertyId'],
+              pageBuilder: (context, state) => PageTransitions.standard(
+                child: BookingRequestScreen(propertyId: state.pathParameters['id']),
               ),
             ),
             GoRoute(
-              path: '$booking/:id',
-              builder: (context, state) => BookingDetailsScreen(
-                bookingId: state.pathParameters['id']!,
+              path: '/bookings/:id',
+              name: bookingDetail,
+              pageBuilder: (context, state) => PageTransitions.emphasized(
+                child: const BookingDetailScreen(),
               ),
+            ),
+
+            // Legacy redirects (singular → plural)
+            GoRoute(
+              path: '/booking/:id',
+              redirect: (context, state) => '/bookings/${state.pathParameters['id']}',
+            ),
+            GoRoute(
+              path: '/booking',
+              redirect: (context, state) => '/bookings',
             ),
 
             // Wallet routes
             GoRoute(
-              path: wallet,
-              builder: (context, state) => const WalletScreen(),
+              path: '/tenant/wallet',
+              name: wallet,
+              pageBuilder: (ctx, st) => PageTransitions.none(child: const WalletScreen()),
+              routes: [
+                GoRoute(
+                  name: walletTopup,
+                  path: 'topup',
+                  pageBuilder: (ctx, st) => PageTransitions.standard(child: const WalletTopupScreen()),
+                ),
+                GoRoute(
+                  name: walletWithdraw,
+                  path: 'withdraw',
+                  pageBuilder: (ctx, st) => PageTransitions.standard(child: const WalletWithdrawScreen()),
+                ),
+                GoRoute(
+                  name: walletHistory,
+                  path: 'history',
+                  pageBuilder: (ctx, st) => PageTransitions.standard(child: const WalletHistoryScreen()),
+                ),
+              ],
+            ),
+
+            // Legacy wallet redirects
+            GoRoute(
+              path: '/wallet',
+              redirect: (ctx, st) => '/tenant/wallet',
             ),
             GoRoute(
-              path: walletTopup,
-              builder: (context, state) => const WalletTopupScreen(),
+              path: '/wallet/topup',
+              redirect: (ctx, st) => '/tenant/wallet/topup',
             ),
             GoRoute(
-              path: walletWithdraw,
-              builder: (context, state) => const WalletWithdrawScreen(),
+              path: '/wallet/withdraw',
+              redirect: (ctx, st) => '/tenant/wallet/withdraw',
             ),
             GoRoute(
-              path: walletHistory,
-              builder: (context, state) => const WalletHistoryScreen(),
+              path: '/wallet/history',
+              redirect: (ctx, st) => '/tenant/wallet/history',
             ),
 
             // Owner routes
@@ -272,7 +317,8 @@ class AppRouter {
             ),
             GoRoute(
               path: '/owner/property/:id/editor',
-              redirect: (context, state) => '/owner/properties/${state.pathParameters['id']}/edit',
+              redirect: (context, state) =>
+                  '/owner/properties/${state.pathParameters['id']}/edit',
             ),
             GoRoute(
               path: ownerPropertyEditorNew,
@@ -284,17 +330,19 @@ class AppRouter {
               name: 'ownerPropertyEditorEdit',
               builder: (context, state) {
                 final rawPropertyId = state.pathParameters['id'];
-                
+
                 // Robust ID handling: decode and validate
                 if (rawPropertyId == null || rawPropertyId.trim().isEmpty) {
                   return const NotFoundScreen();
                 }
-                
+
                 // Decode percent-encoded ID
                 final propertyId = Uri.decodeComponent(rawPropertyId.trim());
-                
+
                 // UI-only guard: check if property exists in demo data
-                final propertyExists = DemoData.properties.any((p) => p.id == propertyId);
+                final propertyExists = DemoData.properties.any(
+                  (p) => p.id == propertyId,
+                );
                 if (!propertyExists) {
                   return const NotFoundScreen();
                 }
@@ -310,9 +358,8 @@ class AppRouter {
             ),
             GoRoute(
               path: '$ownerProperty/:id',
-              builder: (context, state) => PropertyDetailScreen(
-                propertyId: state.pathParameters['id']!,
-              ),
+              builder: (context, state) =>
+                  PropertyDetailScreen(propertyId: state.pathParameters['id']!),
             ),
 
             GoRoute(
@@ -327,9 +374,7 @@ class AppRouter {
             ),
             GoRoute(
               path: '$ownerBooking/:id',
-              builder: (context, state) => BookingDetailsScreen(
-                bookingId: state.pathParameters['id']!,
-              ),
+              builder: (context, state) => const BookingDetailScreen(),
             ),
 
             // Admin routes
@@ -343,7 +388,8 @@ class AppRouter {
             ),
             GoRoute(
               path: '$adminUser/:id',
-              builder: (context, state) => const ProfileScreen(), // Placeholder for admin user details
+              builder: (context, state) =>
+                  const ProfileScreen(), // Placeholder for admin user details
             ),
             GoRoute(
               path: adminProperties,
@@ -351,7 +397,8 @@ class AppRouter {
             ),
             GoRoute(
               path: '$adminProperty/:id',
-              builder: (context, state) => const PropertyDetailScreen( // Placeholder for admin property details
+              builder: (context, state) => const PropertyDetailScreen(
+                // Placeholder for admin property details
                 propertyId: 'placeholder',
               ),
             ),
@@ -361,9 +408,7 @@ class AppRouter {
             ),
             GoRoute(
               path: '$adminBooking/:id',
-              builder: (context, state) => BookingDetailsScreen( // Placeholder for admin booking details
-                bookingId: 'placeholder',
-              ),
+              builder: (context, state) => const BookingDetailScreen(),
             ),
             GoRoute(
               path: adminWalletAdjust,
@@ -376,16 +421,18 @@ class AppRouter {
 
             // Profile & Settings routes
             GoRoute(
-              path: profile,
-              builder: (context, state) => const ProfileScreen(),
+              path: '/tenant/profile',
+              name: profile,
+              pageBuilder: (ctx, st) => const NoTransitionPage(child: ProfileScreen()),
             ),
-            GoRoute(
-              path: kyc,
-              builder: (context, state) => const KYCScreen(),
-            ),
+            GoRoute(path: kyc, builder: (context, state) => const KYCScreen()),
             GoRoute(
               path: settings,
               builder: (context, state) => const SettingsScreen(),
+            ),
+            GoRoute(
+              path: languageThemeSettings,
+              builder: (context, state) => const LanguageThemeSettings(),
             ),
             GoRoute(
               path: devTools,
@@ -401,11 +448,17 @@ class AppRouter {
               builder: (context, state) => const AboutScreen(),
             ),
 
-                      // Not found route (must be last)
-          GoRoute(
-            path: '*',
-            builder: (context, state) => const NotFoundScreen(),
-          ),
+            // Legacy profile redirects
+            GoRoute(
+              path: '/profile',
+              redirect: (ctx, st) => '/tenant/profile',
+            ),
+
+            // Not found route (must be last)
+            GoRoute(
+              path: '*',
+              builder: (context, state) => const NotFoundScreen(),
+            ),
           ],
         ),
       ],
@@ -422,11 +475,11 @@ class AppRouter {
   }
 
   static void goToBookingRequest(BuildContext context, String propertyId) {
-    context.go('$bookingRequest?propertyId=$propertyId');
+    context.go('$bookingRequest/$propertyId');
   }
 
   static void goToBookingDetails(BuildContext context, String bookingId) {
-    context.go('$booking/$bookingId');
+    context.go('/bookings/$bookingId');
   }
 
   static void goToProfile(BuildContext context) {
@@ -447,13 +500,15 @@ class AppRouter {
 
   /// Get current bottom nav index based on location
   static int getBottomNavIndex(String location) {
-    if (location.startsWith('/tenant/home') || location.startsWith('/tenant/properties')) {
+    if (location.startsWith('/tenant/home') ||
+        location.startsWith('/tenant/properties')) {
       return 0; // Home
     } else if (location.startsWith('/bookings')) {
       return 1; // Bookings
-    } else if (location.startsWith('/wallet')) {
+    } else if (location.startsWith('/tenant/wallet') || location.startsWith('/wallet')) {
       return 2; // Wallet
-    } else if (location.startsWith('/profile') || location.startsWith('/settings')) {
+    } else if (location.startsWith('/tenant/profile') || location.startsWith('/profile') ||
+        location.startsWith('/settings')) {
       return 3; // Profile
     }
     return 0; // Default to Home
@@ -461,13 +516,21 @@ class AppRouter {
 
   /// Check if route requires authentication
   static bool requiresAuth(String location) {
-    const publicRoutes = [authSplash, authRegister, authLogin, authForgotPassword, authResetPassword];
+    const publicRoutes = [
+      authSplash,
+      authRegister,
+      authLogin,
+      authForgotPassword,
+      authResetPassword,
+    ];
     return !publicRoutes.contains(location);
   }
 
   /// Check if route is accessible by current role
   static bool isAccessibleByRole(String location, UserRole role) {
-    if (location.startsWith('/owner/') && role != UserRole.owner && role != UserRole.admin) {
+    if (location.startsWith('/owner/') &&
+        role != UserRole.owner &&
+        role != UserRole.admin) {
       return false;
     }
     if (location.startsWith('/admin/') && role != UserRole.admin) {

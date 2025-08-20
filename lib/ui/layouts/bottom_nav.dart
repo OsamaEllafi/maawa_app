@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../l10n/app_localizations.dart';
-import '../../core/theme/app_theme.dart';
 import '../../app/navigation/app_router.dart';
 
 /// Bottom navigation bar for main tenant functionality
@@ -13,6 +12,8 @@ class BottomNav extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final location = GoRouterState.of(context).uri.toString();
     final currentIndex = AppRouter.getBottomNavIndex(location);
+    
+    debugPrint('selectedIndex=$currentIndex loc=${GoRouterState.of(context).matchedLocation}');
 
     return NavigationBar(
       selectedIndex: currentIndex,
@@ -43,18 +44,20 @@ class BottomNav extends StatelessWidget {
   }
 
   void _onDestinationSelected(BuildContext context, int index) {
+    debugPrint('BottomNav tapped=$index -> goNamed(...)');
+    final r = GoRouter.of(context);
     switch (index) {
       case 0:
-        context.go(AppRouter.tenantHome);
+        r.goNamed('tenantHome');
         break;
       case 1:
-        context.go(AppRouter.myBookings);
+        r.goNamed('myBookings');
         break;
       case 2:
-        context.go(AppRouter.wallet);
+        r.goNamed(AppRouter.wallet);
         break;
       case 3:
-        context.go(AppRouter.profile);
+        r.goNamed(AppRouter.profile);
         break;
     }
   }

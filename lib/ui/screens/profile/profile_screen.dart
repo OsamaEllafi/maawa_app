@@ -15,7 +15,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   String _userName = 'John Doe';
-  String _userEmail = 'john.doe@example.com';
+  final String _userEmail = 'john.doe@example.com';
   String _userPhone = '+1 (555) 123-4567';
   String _userAvatar = 'JD';
   bool _isEditing = false;
@@ -281,8 +281,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Text(
                     _userEmail,
                     style: theme.textTheme.bodyLarge?.copyWith(
-                      color: theme.colorScheme.onPrimaryContainer.withOpacity(
-                        0.8,
+                      color: theme.colorScheme.onPrimaryContainer.withValues(
+                        alpha: 0.8,
                       ),
                     ),
                   ).animate().fadeIn(delay: 400.ms, duration: 600.ms),
@@ -519,7 +519,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         Text(
           label,
           style: theme.textTheme.bodySmall?.copyWith(
-            color: theme.colorScheme.onPrimaryContainer.withOpacity(0.8),
+            color: theme.colorScheme.onPrimaryContainer.withValues(alpha: 0.8),
           ),
         ),
       ],

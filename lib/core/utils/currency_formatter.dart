@@ -6,13 +6,11 @@ class CurrencyFormatter {
   static const String _currencySymbol = 'د.ل';
 
   /// Format amount as LYD with proper decimal places
-  static String formatLYD(double amount) {
-    final formatter = NumberFormat.currency(
-      locale: 'ar_LY',
-      symbol: _currencySymbol,
-      decimalDigits: 2,
-    );
-    return formatter.format(amount);
+  /// Uses 2 decimals consistently for UI consistency (design choice)
+  static String formatLYD(num value, {int decimals = 2, bool withSign = false}) {
+    final sign = withSign && value > 0 ? '+' : '';
+    // Keep 2 decimals for UI consistency even though LYD exponent is 3
+    return '$sign$_currencySymbol ${value.toStringAsFixed(decimals)}';
   }
 
   /// Format amount as LYD without symbol (for input fields)
@@ -40,7 +38,7 @@ class CurrencyFormatter {
 
   /// Format price range (e.g., "د.ل 1,234.00 - 2,345.00")
   static String formatPriceRange(double minPrice, double maxPrice) {
-    return formatLYD(minPrice) + ' - ' + formatLYD(maxPrice);
+    return '${formatLYD(minPrice)} - ${formatLYD(maxPrice)}';
   }
 
   /// Format price with discount
@@ -51,6 +49,6 @@ class CurrencyFormatter {
     final discount = originalPrice - discountedPrice;
     final discountPercentage = (discount / originalPrice * 100).round();
 
-    return formatLYD(discountedPrice) + ' ($discountPercentage% off)';
+    return '${formatLYD(discountedPrice)} ($discountPercentage% off)';
   }
 }

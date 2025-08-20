@@ -3,10 +3,11 @@ import 'package:go_router/go_router.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../app/navigation/app_router.dart';
-import '../../../app/models/user_role.dart';
+
 import '../../widgets/debug/layout_debug_panel.dart';
 import '../../widgets/debug/route_inspector_panel.dart';
 import '../../widgets/common/app_top_bar.dart';
+import '../../widgets/common/role_simulator_switcher.dart';
 
 /// Developer tools screen with style guide access and role simulation
 class DevToolsScreen extends StatefulWidget {
@@ -31,7 +32,6 @@ class _DevToolsScreenState extends State<DevToolsScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
 
     return Scaffold(
       appBar: AppTopBar(title: l10n.devToolsTitle),
@@ -155,51 +155,9 @@ class _DevToolsScreenState extends State<DevToolsScreen> {
             ),
             SizedBox(height: Spacing.lg),
 
-            _buildSection(
-              context,
-              title: 'Role Simulation',
-              items: [
-                ValueListenableBuilder<UserRole>(
-                  valueListenable: AppRouter.currentRole,
-                  builder: (context, currentRole, child) {
-                    return Column(
-                      children: [
-                        ListTile(
-                          leading: const Icon(Icons.person_outline),
-                          title: const Text('Current Role'),
-                          subtitle: Text(currentRole.displayName),
-                          trailing: Text(
-                            currentRole.description,
-                            style: theme.textTheme.bodySmall,
-                          ),
-                        ),
-                        ...UserRole.allRoles.map((role) {
-                          final isSelected = role == currentRole;
-                          return RadioListTile<UserRole>(
-                            title: Text(role.displayName),
-                            subtitle: Text(role.description),
-                            value: role,
-                            groupValue: currentRole,
-                            onChanged: (selectedRole) {
-                              if (selectedRole != null) {
-                                AppRouter.currentRole.value = selectedRole;
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      'Switched to ${selectedRole.displayName} role',
-                                    ),
-                                  ),
-                                );
-                              }
-                            },
-                          );
-                        }),
-                      ],
-                    );
-                  },
-                ),
-              ],
-            ),
+            // Role Simulator Widget
+            const RoleSimulatorSwitcher(),
+            SizedBox(height: Spacing.lg),
             SizedBox(height: Spacing.lg),
 
             _buildSection(
@@ -239,6 +197,18 @@ class _DevToolsScreenState extends State<DevToolsScreen> {
                 _buildInfoItem('Flutter Version', '3.8.1'),
                 _buildInfoItem('Build Mode', 'Debug'),
                 _buildInfoItem('Platform', Theme.of(context).platform.name),
+              ],
+            ),
+            SizedBox(height: Spacing.lg),
+
+            _buildSection(
+              context,
+              title: 'Network Configuration',
+              items: [
+                _buildInfoItem('Base URL', 'http://192.168.1.100:8080/api'),
+                _buildInfoItem('Network Status', 'Offline'),
+                _buildInfoItem('API Version', 'v1'),
+                _buildInfoItem('Environment', 'Development'),
               ],
             ),
           ],

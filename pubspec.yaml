@@ -54,6 +54,9 @@ dependencies:
   
   # UI Helpers
   shimmer: ^3.0.0
+  
+  # Collections
+  collection: ^1.18.0
 
 dev_dependencies:
   flutter_test:

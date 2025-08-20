@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/utils/currency_formatter.dart';
+import '../../../demo/demo_data.dart';
 import '../../../app/navigation/app_router.dart';
+import '../../widgets/wallet/transaction_item.dart';
 
 /// Wallet screen showing balance and recent transactions
 class WalletScreen extends StatelessWidget {
@@ -19,7 +22,7 @@ class WalletScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.history),
-            onPressed: () => context.push(AppRouter.walletHistory),
+            onPressed: () => context.pushNamed(AppRouter.walletHistory),
           ),
         ],
       ),
@@ -36,7 +39,7 @@ class WalletScreen extends StatelessWidget {
                 gradient: LinearGradient(
                   colors: [
                     theme.colorScheme.primary,
-                    theme.colorScheme.primary.withOpacity(0.8),
+                    theme.colorScheme.primary.withValues(alpha: 0.8),
                   ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
@@ -49,12 +52,12 @@ class WalletScreen extends StatelessWidget {
                   Text(
                     'Available Balance',
                     style: theme.textTheme.bodyLarge?.copyWith(
-                      color: theme.colorScheme.onPrimary.withOpacity(0.9),
+                      color: theme.colorScheme.onPrimary.withValues(alpha: 0.9),
                     ),
                   ),
                   SizedBox(height: Spacing.sm),
                   Text(
-                    '\$2,450.00',
+                    CurrencyFormatter.formatLYD(DemoData.walletBalance),
                     style: theme.textTheme.displaySmall?.copyWith(
                       color: theme.colorScheme.onPrimary,
                       fontWeight: FontWeight.bold,
@@ -65,7 +68,7 @@ class WalletScreen extends StatelessWidget {
                     children: [
                       Expanded(
                         child: ElevatedButton.icon(
-                          onPressed: () => context.push(AppRouter.walletTopup),
+                          onPressed: () => context.pushNamed(AppRouter.walletTopup),
                           icon: const Icon(Icons.add),
                           label: const Text('Top Up'),
                           style: ElevatedButton.styleFrom(
@@ -78,7 +81,7 @@ class WalletScreen extends StatelessWidget {
                       Expanded(
                         child: OutlinedButton.icon(
                           onPressed: () =>
-                              context.push(AppRouter.walletWithdraw),
+                              context.pushNamed(AppRouter.walletWithdraw),
                           icon: const Icon(Icons.remove),
                           label: const Text('Withdraw'),
                           style: OutlinedButton.styleFrom(
@@ -105,10 +108,10 @@ class WalletScreen extends StatelessWidget {
                   child: _buildStatCard(
                     context,
                     title: 'This Month',
-                    amount: '\$850',
+                    amount: CurrencyFormatter.formatLYD(850),
                     subtitle: 'Spent on bookings',
                     icon: Icons.trending_down,
-                    color: AppColors.error500,
+                    color: theme.colorScheme.error,
                   ),
                 ),
                 SizedBox(width: Spacing.md),
@@ -116,10 +119,10 @@ class WalletScreen extends StatelessWidget {
                   child: _buildStatCard(
                     context,
                     title: 'Earned',
-                    amount: '\$320',
+                    amount: CurrencyFormatter.formatLYD(320),
                     subtitle: 'From referrals',
                     icon: Icons.trending_up,
-                    color: AppColors.success500,
+                    color: theme.colorScheme.primary,
                   ),
                 ),
               ],
@@ -130,18 +133,36 @@ class WalletScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Recent Transactions', style: theme.textTheme.titleLarge),
+                Expanded(
+                  child: Text(
+                    'Recent Transactions', 
+                    style: theme.textTheme.titleLarge,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
                 TextButton(
-                  onPressed: () => context.push(AppRouter.walletHistory),
+                  onPressed: () => context.pushNamed(AppRouter.walletHistory),
                   child: const Text('View All'),
                 ),
               ],
             ),
             SizedBox(height: Spacing.md),
 
-            ...List.generate(
-              5,
-              (index) => _buildTransactionItem(context, index),
+            // Transaction list
+            ...DemoData.transactions.take(5).map((transaction) => 
+              TransactionItem(
+                transaction: transaction,
+                onTap: () {
+                  // Could navigate to transaction detail in the future
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Transaction: ${transaction.title}'),
+                      duration: const Duration(seconds: 2),
+                    ),
+                  );
+                },
+              ),
             ),
           ],
         ),
@@ -169,7 +190,14 @@ class WalletScreen extends StatelessWidget {
               children: [
                 Icon(icon, color: color, size: 20),
                 SizedBox(width: Spacing.sm),
-                Text(title, style: theme.textTheme.bodyMedium),
+                Expanded(
+                  child: Text(
+                    title, 
+                    style: theme.textTheme.bodyMedium,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
               ],
             ),
             SizedBox(height: Spacing.sm),
@@ -179,115 +207,14 @@ class WalletScreen extends StatelessWidget {
                 color: color,
                 fontWeight: FontWeight.bold,
               ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
-            Text(subtitle, style: theme.textTheme.bodySmall),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTransactionItem(BuildContext context, int index) {
-    final theme = Theme.of(context);
-    final transactions = [
-      {
-        'type': 'booking',
-        'title': 'Booking Payment',
-        'subtitle': 'Downtown Apartment',
-        'amount': '-\$450.00',
-        'date': '2 days ago',
-        'icon': Icons.home,
-        'color': AppColors.error500,
-      },
-      {
-        'type': 'topup',
-        'title': 'Wallet Top-up',
-        'subtitle': 'Credit Card ****1234',
-        'amount': '+\$500.00',
-        'date': '1 week ago',
-        'icon': Icons.add_circle,
-        'color': AppColors.success500,
-      },
-      {
-        'type': 'refund',
-        'title': 'Booking Refund',
-        'subtitle': 'Cancelled booking',
-        'amount': '+\$200.00',
-        'date': '2 weeks ago',
-        'icon': Icons.undo,
-        'color': AppColors.success500,
-      },
-      {
-        'type': 'fee',
-        'title': 'Service Fee',
-        'subtitle': 'Monthly fee',
-        'amount': '-\$5.00',
-        'date': '3 weeks ago',
-        'icon': Icons.receipt,
-        'color': AppColors.error500,
-      },
-      {
-        'type': 'referral',
-        'title': 'Referral Bonus',
-        'subtitle': 'Friend joined Maawa',
-        'amount': '+\$25.00',
-        'date': '1 month ago',
-        'icon': Icons.people,
-        'color': AppColors.success500,
-      },
-    ];
-
-    final transaction = transactions[index];
-
-    return Card(
-      margin: EdgeInsets.only(bottom: Spacing.sm),
-      child: Padding(
-        padding: EdgeInsets.all(Spacing.md),
-        child: Row(
-          children: [
-            Container(
-              padding: EdgeInsets.all(Spacing.sm),
-              decoration: BoxDecoration(
-                color: (transaction['color'] as Color).withOpacity(0.1),
-                borderRadius: BorderRadius.circular(BorderRadiusTokens.small),
-              ),
-              child: Icon(
-                transaction['icon'] as IconData,
-                color: transaction['color'] as Color,
-                size: 20,
-              ),
-            ),
-            SizedBox(width: Spacing.md),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    transaction['title'] as String,
-                    style: theme.textTheme.titleSmall,
-                  ),
-                  Text(
-                    transaction['subtitle'] as String,
-                    style: theme.textTheme.bodySmall,
-                  ),
-                ],
-              ),
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  transaction['amount'] as String,
-                  style: theme.textTheme.titleSmall?.copyWith(
-                    color: transaction['color'] as Color,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  transaction['date'] as String,
-                  style: theme.textTheme.bodySmall,
-                ),
-              ],
+            Text(
+              subtitle, 
+              style: theme.textTheme.bodySmall,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
           ],
         ),

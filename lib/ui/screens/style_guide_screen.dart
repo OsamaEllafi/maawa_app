@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import '../../core/theme/app_theme.dart';
 import '../../l10n/app_localizations.dart';
-import '../../app/navigation/app_router.dart';
 import '../widgets/common/app_top_bar.dart';
 
 /// Style Guide screen that showcases all design system components

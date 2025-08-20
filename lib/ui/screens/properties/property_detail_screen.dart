@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'dart:math' as math;
 import '../../../core/theme/app_theme.dart';
 import '../../../demo/demo_data.dart';
 import '../../../core/data/amenities_data.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../widgets/media/media_carousel.dart';
 import '../../widgets/common/skeleton_list.dart';
 import '../../widgets/common/app_top_bar.dart';
+import '../../widgets/reviews/reviews_list.dart';
+import '../../widgets/reviews/review_form_sheet.dart';
+import '../../widgets/reviews/rating_badge.dart';
 import '../../../app/navigation/app_router.dart';
 
 /// Property detail screen
@@ -46,7 +49,6 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = Localizations.localeOf(context).languageCode;
-    final isReducedMotion = MediaQuery.of(context).accessibleNavigation;
 
     // Compute bounded media height
     final mediaHeight = math.min(
@@ -249,7 +251,7 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
                             );
                             context.pushNamed(
                               'bookingRequest',
-                              queryParameters: {'propertyId': _property!.id},
+                              pathParameters: {'id': _property!.id},
                             );
                           },
                           icon: const Icon(Icons.calendar_today),
@@ -330,95 +332,7 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
                   SizedBox(height: Spacing.xl),
 
                   // Reviews section
-                  Text(
-                    'Reviews',
-                    style: theme.textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: Spacing.md),
-                  ..._property!.reviews
-                      .take(3)
-                      .map(
-                        (review) => Container(
-                          margin: EdgeInsets.only(bottom: Spacing.md),
-                          padding: EdgeInsets.all(Spacing.md),
-                          decoration: BoxDecoration(
-                            color: theme.colorScheme.surfaceContainerHighest,
-                            borderRadius: BorderRadius.circular(
-                              BorderRadiusTokens.medium,
-                            ),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  CircleAvatar(
-                                    radius: 16,
-                                    backgroundColor: theme.colorScheme.primary,
-                                    child: Text(
-                                      review.userName[0].toUpperCase(),
-                                      style: theme.textTheme.bodySmall
-                                          ?.copyWith(
-                                            color: theme.colorScheme.onPrimary,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                    ),
-                                  ),
-                                  SizedBox(width: Spacing.sm),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          review.userName,
-                                          style: theme.textTheme.bodyMedium
-                                              ?.copyWith(
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                        ),
-                                        Row(
-                                          children: [
-                                            ...List.generate(
-                                              5,
-                                              (index) => Icon(
-                                                Icons.star_rounded,
-                                                size: 16,
-                                                color: index < review.rating
-                                                    ? AppColors.warning500
-                                                    : theme
-                                                          .colorScheme
-                                                          .onSurfaceVariant,
-                                              ),
-                                            ),
-                                            SizedBox(width: Spacing.xs),
-                                            Text(
-                                              review.rating.toString(),
-                                              style: theme.textTheme.bodySmall
-                                                  ?.copyWith(
-                                                    color: theme
-                                                        .colorScheme
-                                                        .onSurfaceVariant,
-                                                  ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: Spacing.sm),
-                              Text(
-                                review.getLocalizedComment(l10n),
-                                style: theme.textTheme.bodyMedium,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                  _ReviewsSection(propertyId: _property!.id),
                 ],
               ),
             ),
@@ -426,5 +340,77 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
         ],
       ),
     );
+  }
+}
+
+/// Reviews section widget
+class _ReviewsSection extends StatefulWidget {
+  const _ReviewsSection({required this.propertyId});
+  final String propertyId;
+
+  @override
+  State<_ReviewsSection> createState() => _ReviewsSectionState();
+}
+
+class _ReviewsSectionState extends State<_ReviewsSection> {
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final (avg: avg, count: count) = DemoData.reviewsAggregate(
+      widget.propertyId,
+    );
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Header row: title + average badge + Write button
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                l10n.reviews,
+                style: Theme.of(
+                  context,
+                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            if (count > 0)
+              Padding(
+                padding: const EdgeInsetsDirectional.only(end: 8),
+                child: RatingBadge(
+                  rating: avg,
+                  reviewCount: count,
+                  size: RatingBadgeSize.small,
+                ),
+              ),
+            FilledButton.icon(
+              onPressed: _onWriteReviewPressed,
+              icon: const Icon(Icons.rate_review),
+              label: Text(l10n.writeReview),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        ReviewsList(
+          propertyId: widget.propertyId,
+          showWriteReviewButton: false,
+        ),
+      ],
+    );
+  }
+
+  Future<void> _onWriteReviewPressed() async {
+    final property = DemoData.getPropertyById(widget.propertyId);
+    if (property == null) return;
+
+    final review = await ReviewFormSheet.show(
+      context,
+      propertyId: widget.propertyId,
+      propertyName: property.title,
+    );
+
+    // When the sheet returns a review (success), refresh aggregates/list
+    if (review != null && mounted) setState(() {});
   }
 }

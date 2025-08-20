@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../app/navigation/tab_roots.dart';
-
+import '../../../core/utils/accessibility_helper.dart';
+import '../../../core/theme/app_theme.dart';
 
 /// Reusable AppBar with automatic back button logic
-/// 
+///
 /// Automatically shows back button on inner screens, but not on:
 /// - Tab root screens (Home, My Bookings, Wallet, Profile)
 /// - Auth screens (Splash, Onboarding, Login, Register, Forgot/Reset)
-/// 
+///
 /// Back button behavior:
 /// - If custom onBack is provided, use that
 /// - If canPop() is true, use context.pop()
@@ -34,13 +35,13 @@ class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     final routerState = GoRouterState.of(context);
     // Prefer matchedLocation for more reliable detection when redirects/params are involved
-    final location = routerState.matchedLocation.isNotEmpty 
-        ? routerState.matchedLocation 
+    final location = routerState.matchedLocation.isNotEmpty
+        ? routerState.matchedLocation
         : routerState.uri.toString();
-    
+
     // Use centralized tab root detection
     final isTabRoot = isTabRootPath(location);
-    
+
     // Determine if we should show back button
     final canPopHere = context.canPop();
     final showBack = showBackAutomatically && !isTabRoot;
@@ -59,13 +60,20 @@ class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       automaticallyImplyLeading: false,
       leading: showBack
-          ? IconButton(
-              onPressed: _handleBack,
-              icon: const BackButtonIcon(),
-              tooltip: AppLocalizations.of(context)?.navBack ?? 'Back',
+          ? AccessibilityHelper.ensureTouchTarget(
+              child: IconButton(
+                onPressed: _handleBack,
+                icon: const BackButtonIcon(),
+                tooltip: AppLocalizations.of(context)?.navBack ?? 'Back',
+              ),
             )
           : null,
-      title: Text(title),
+      title: Text(
+        title,
+        style: AccessibilityHelper.ensureTextScaling(
+          Theme.of(context).textTheme.titleLarge!,
+        ),
+      ),
       centerTitle: centerTitle,
       actions: actions,
     );
