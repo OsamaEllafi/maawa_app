@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../widgets/common/app_top_bar.dart';
 
 /// Property media management screen for owners
 class PropertyMediaScreen extends StatelessWidget {
-  const PropertyMediaScreen({
-    super.key,
-    required this.propertyId,
-  });
+  const PropertyMediaScreen({super.key, required this.propertyId});
 
   final String propertyId;
 
@@ -17,8 +15,8 @@ class PropertyMediaScreen extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Media'),
+      appBar: AppTopBar(
+        title: 'Media',
         actions: [
           IconButton(
             icon: const Icon(Icons.add_a_photo),
@@ -40,10 +38,7 @@ class PropertyMediaScreen extends StatelessWidget {
                 color: theme.colorScheme.primary,
               ),
               SizedBox(height: Spacing.lg),
-              Text(
-                'Property Media',
-                style: theme.textTheme.headlineMedium,
-              ),
+              Text('Property Media', style: theme.textTheme.headlineMedium),
               SizedBox(height: Spacing.md),
               Text(
                 'Property ID: $propertyId',

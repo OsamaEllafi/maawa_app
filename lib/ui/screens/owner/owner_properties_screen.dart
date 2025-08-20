@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../widgets/common/app_top_bar.dart';
 
 /// Owner properties screen for property management
 class OwnerPropertiesScreen extends StatelessWidget {
@@ -12,8 +13,8 @@ class OwnerPropertiesScreen extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('My Properties'),
+      appBar: AppTopBar(
+        title: 'My Properties',
         actions: [
           IconButton(
             icon: const Icon(Icons.add),

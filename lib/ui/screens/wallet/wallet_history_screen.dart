@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import '../../../l10n/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../widgets/common/app_top_bar.dart';
+import '../../../app/navigation/tab_roots.dart';
 
 /// Wallet history screen showing all transactions
 class WalletHistoryScreen extends StatefulWidget {
@@ -30,11 +28,10 @@ class _WalletHistoryScreenState extends State<WalletHistoryScreen>
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
-
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
+        leading: buildBackLeading(context), // Use centralized helper
         title: const Text('Transaction History'),
         bottom: TabBar(
           controller: _tabController,
@@ -61,17 +58,18 @@ class _WalletHistoryScreenState extends State<WalletHistoryScreen>
 
   Widget _buildTransactionsList(String filter) {
     final transactions = _getFilteredTransactions(filter);
-    
+
     return ListView.builder(
       padding: EdgeInsets.all(Spacing.md),
       itemCount: transactions.length,
-      itemBuilder: (context, index) => _buildTransactionItem(transactions[index]),
+      itemBuilder: (context, index) =>
+          _buildTransactionItem(transactions[index]),
     );
   }
 
   Widget _buildTransactionItem(Map<String, dynamic> transaction) {
     final theme = Theme.of(context);
-    
+
     return Card(
       margin: EdgeInsets.only(bottom: Spacing.sm),
       child: Padding(
@@ -119,8 +117,12 @@ class _WalletHistoryScreenState extends State<WalletHistoryScreen>
                           vertical: 2,
                         ),
                         decoration: BoxDecoration(
-                          color: _getStatusColor(transaction['status']).withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(BorderRadiusTokens.small),
+                          color: _getStatusColor(
+                            transaction['status'],
+                          ).withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(
+                            BorderRadiusTokens.small,
+                          ),
                         ),
                         child: Text(
                           transaction['status'] as String,
@@ -269,7 +271,8 @@ class _WalletHistoryScreenState extends State<WalletHistoryScreen>
         case 'withdrawal':
           return transaction['type'] == 'withdrawal';
         case 'booking':
-          return transaction['type'] == 'booking' || transaction['type'] == 'referral';
+          return transaction['type'] == 'booking' ||
+              transaction['type'] == 'referral';
         default:
           return true;
       }

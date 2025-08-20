@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../l10n/app_localizations.dart';
-import '../../../app/navigation/app_router.dart';
+import '../../../app/navigation/tab_roots.dart';
 
-/// Reusable app bar with automatic back button logic
+
+/// Reusable AppBar with automatic back button logic
+/// 
+/// Automatically shows back button on inner screens, but not on:
+/// - Tab root screens (Home, My Bookings, Wallet, Profile)
+/// - Auth screens (Splash, Onboarding, Login, Register, Forgot/Reset)
+/// 
+/// Back button behavior:
+/// - If custom onBack is provided, use that
+/// - If canPop() is true, use context.pop()
+/// - Otherwise, navigate to Home tab as fallback
 class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
-  final String title;
-  final List<Widget>? actions;
-  final bool showBackAutomatically;
-  final VoidCallback? onBack;
-  final bool centerTitle;
-
   const AppTopBar({
     super.key,
     required this.title,
@@ -20,18 +24,43 @@ class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
     this.centerTitle = false,
   });
 
+  final String title;
+  final List<Widget>? actions;
+  final bool showBackAutomatically;
+  final VoidCallback? onBack;
+  final bool centerTitle;
+
   @override
   Widget build(BuildContext context) {
-    final loc = GoRouterState.of(context).uri.toString();
-    final isTabRoot = _isTabRoot(loc);
+    final routerState = GoRouterState.of(context);
+    // Prefer matchedLocation for more reliable detection when redirects/params are involved
+    final location = routerState.matchedLocation.isNotEmpty 
+        ? routerState.matchedLocation 
+        : routerState.uri.toString();
+    
+    // Use centralized tab root detection
+    final isTabRoot = isTabRootPath(location);
+    
+    // Determine if we should show back button
     final canPopHere = context.canPop();
-    final showBack = showBackAutomatically && !isTabRoot && canPopHere;
+    final showBack = showBackAutomatically && !isTabRoot;
+
+    void _handleBack() {
+      if (onBack != null) {
+        onBack!();
+      } else if (canPopHere) {
+        context.pop();
+      } else {
+        // Fallback to Home tab when no navigation history
+        context.goNamed('tenantHome');
+      }
+    }
 
     return AppBar(
       automaticallyImplyLeading: false,
       leading: showBack
           ? IconButton(
-              onPressed: onBack ?? () => context.pop(),
+              onPressed: _handleBack,
               icon: const BackButtonIcon(),
               tooltip: AppLocalizations.of(context)?.navBack ?? 'Back',
             )
@@ -44,16 +73,4 @@ class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
-
-  /// Check if current location is a tab root
-  bool _isTabRoot(String location) {
-    const tabRootPaths = [
-      '/tenant/home',
-      '/tenant/bookings/my',
-      '/tenant/wallet',
-      '/tenant/profile',
-    ];
-
-    return tabRootPaths.any((path) => location.startsWith(path));
-  }
 }

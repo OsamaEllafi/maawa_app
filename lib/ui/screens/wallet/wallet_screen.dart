@@ -19,7 +19,7 @@ class WalletScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.history),
-            onPressed: () => context.go(AppRouter.walletHistory),
+            onPressed: () => context.push(AppRouter.walletHistory),
           ),
         ],
       ),
@@ -65,7 +65,7 @@ class WalletScreen extends StatelessWidget {
                     children: [
                       Expanded(
                         child: ElevatedButton.icon(
-                          onPressed: () => context.go(AppRouter.walletTopup),
+                          onPressed: () => context.push(AppRouter.walletTopup),
                           icon: const Icon(Icons.add),
                           label: const Text('Top Up'),
                           style: ElevatedButton.styleFrom(
@@ -77,7 +77,8 @@ class WalletScreen extends StatelessWidget {
                       SizedBox(width: Spacing.md),
                       Expanded(
                         child: OutlinedButton.icon(
-                          onPressed: () => context.go(AppRouter.walletWithdraw),
+                          onPressed: () =>
+                              context.push(AppRouter.walletWithdraw),
                           icon: const Icon(Icons.remove),
                           label: const Text('Withdraw'),
                           style: OutlinedButton.styleFrom(
@@ -131,7 +132,7 @@ class WalletScreen extends StatelessWidget {
               children: [
                 Text('Recent Transactions', style: theme.textTheme.titleLarge),
                 TextButton(
-                  onPressed: () => context.go(AppRouter.walletHistory),
+                  onPressed: () => context.push(AppRouter.walletHistory),
                   child: const Text('View All'),
                 ),
               ],

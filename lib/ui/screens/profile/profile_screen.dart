@@ -60,44 +60,58 @@ class _ProfileScreenState extends State<ProfileScreen> {
             SizedBox(height: Spacing.md),
             Wrap(
               spacing: Spacing.sm,
-              children: [
-                'JD', 'JS', 'MJ', 'AK', 'SM', 'AB'
-              ].map((initials) => Semantics(
-                label: 'Select avatar with initials $initials',
-                button: true,
-                child: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _userAvatar = initials;
-                    });
-                    Navigator.of(context).pop();
-                  },
-                  child: Container(
-                    width: 60,
-                    height: 60,
-                    decoration: BoxDecoration(
-                      color: _userAvatar == initials 
-                          ? Theme.of(context).colorScheme.primary
-                          : Theme.of(context).colorScheme.surfaceContainerHighest,
-                      borderRadius: BorderRadius.circular(30),
-                      border: _userAvatar == initials
-                          ? Border.all(color: Theme.of(context).colorScheme.primary, width: 2)
-                          : null,
-                    ),
-                    child: Center(
-                      child: Text(
-                        initials,
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          color: _userAvatar == initials
-                              ? Theme.of(context).colorScheme.onPrimary
-                              : Theme.of(context).colorScheme.onSurface,
-                          fontWeight: FontWeight.bold,
+              children: ['JD', 'JS', 'MJ', 'AK', 'SM', 'AB']
+                  .map(
+                    (initials) => Semantics(
+                      label: 'Select avatar with initials $initials',
+                      button: true,
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _userAvatar = initials;
+                          });
+                          Navigator.of(context).pop();
+                        },
+                        child: Container(
+                          width: 60,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            color: _userAvatar == initials
+                                ? Theme.of(context).colorScheme.primary
+                                : Theme.of(
+                                    context,
+                                  ).colorScheme.surfaceContainerHighest,
+                            borderRadius: BorderRadius.circular(30),
+                            border: _userAvatar == initials
+                                ? Border.all(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.primary,
+                                    width: 2,
+                                  )
+                                : null,
+                          ),
+                          child: Center(
+                            child: Text(
+                              initials,
+                              style: Theme.of(context).textTheme.titleMedium
+                                  ?.copyWith(
+                                    color: _userAvatar == initials
+                                        ? Theme.of(
+                                            context,
+                                          ).colorScheme.onPrimary
+                                        : Theme.of(
+                                            context,
+                                          ).colorScheme.onSurface,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ),
-              )).toList(),
+                  )
+                  .toList(),
             ),
           ],
         ),
@@ -172,10 +186,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         title: Text(l10n.profile),
         actions: [
           if (_isEditing)
-            TextButton(
-              onPressed: _toggleEdit,
-              child: const Text('Save'),
-            )
+            TextButton(onPressed: _toggleEdit, child: const Text('Save'))
           else
             IconButton(
               icon: const Icon(Icons.edit),
@@ -184,7 +195,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           IconButton(
             icon: const Icon(Icons.settings),
-            onPressed: () => context.go(AppRouter.settings),
+            onPressed: () => context.push(AppRouter.settings),
             tooltip: 'Settings',
           ),
         ],
@@ -203,46 +214,46 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 children: [
                   // Avatar with edit functionality
                   GestureDetector(
-                    onTap: _isEditing ? _changeAvatar : null,
-                    child: Stack(
-                      children: [
-                        CircleAvatar(
-                          radius: 50,
-                          backgroundColor: theme.colorScheme.primary,
-                          child: Text(
-                            _userAvatar,
-                            style: theme.textTheme.headlineMedium?.copyWith(
-                              color: theme.colorScheme.onPrimary,
-                              fontWeight: FontWeight.bold,
+                        onTap: _isEditing ? _changeAvatar : null,
+                        child: Stack(
+                          children: [
+                            CircleAvatar(
+                              radius: 50,
+                              backgroundColor: theme.colorScheme.primary,
+                              child: Text(
+                                _userAvatar,
+                                style: theme.textTheme.headlineMedium?.copyWith(
+                                  color: theme.colorScheme.onPrimary,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ),
-                          ),
+                            if (_isEditing)
+                              Positioned(
+                                bottom: 0,
+                                right: 0,
+                                child: Container(
+                                  padding: EdgeInsets.all(Spacing.xs),
+                                  decoration: BoxDecoration(
+                                    color: theme.colorScheme.primary,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Icon(
+                                    Icons.camera_alt,
+                                    size: 20,
+                                    color: theme.colorScheme.onPrimary,
+                                  ),
+                                ),
+                              ),
+                          ],
                         ),
-                        if (_isEditing)
-                          Positioned(
-                            bottom: 0,
-                            right: 0,
-                            child: Container(
-                              padding: EdgeInsets.all(Spacing.xs),
-                              decoration: BoxDecoration(
-                                color: theme.colorScheme.primary,
-                                shape: BoxShape.circle,
-                              ),
-                              child: Icon(
-                                Icons.camera_alt,
-                                size: 20,
-                                color: theme.colorScheme.onPrimary,
-                              ),
-                            ),
-                          ),
-                      ],
-                    ),
-                  )
+                      )
                       .animate()
                       .fadeIn(duration: 600.ms)
                       .scale(begin: const Offset(0.8, 0.8), duration: 600.ms),
-                  
+
                   SizedBox(height: Spacing.md),
-                  
+
                   // Name field (editable when editing)
                   if (_isEditing)
                     TextFormField(
@@ -264,33 +275,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         color: theme.colorScheme.onPrimaryContainer,
                         fontWeight: FontWeight.bold,
                       ),
-                    )
-                        .animate()
-                        .fadeIn(delay: 200.ms, duration: 600.ms),
-                  
+                    ).animate().fadeIn(delay: 200.ms, duration: 600.ms),
+
                   // Email (read-only)
                   Text(
                     _userEmail,
                     style: theme.textTheme.bodyLarge?.copyWith(
-                      color: theme.colorScheme.onPrimaryContainer.withOpacity(0.8),
+                      color: theme.colorScheme.onPrimaryContainer.withOpacity(
+                        0.8,
+                      ),
                     ),
-                  )
-                      .animate()
-                      .fadeIn(delay: 400.ms, duration: 600.ms),
-                  
+                  ).animate().fadeIn(delay: 400.ms, duration: 600.ms),
+
                   SizedBox(height: Spacing.md),
-                  
+
                   // Stats row
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      _buildStatItem(context, 'Bookings', '12'),
-                      SizedBox(width: Spacing.xl),
-                      _buildStatItem(context, 'Reviews', '8'),
-                      SizedBox(width: Spacing.xl),
-                      _buildStatItem(context, 'Rating', '4.8'),
-                    ],
-                  )
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          _buildStatItem(context, 'Bookings', '12'),
+                          SizedBox(width: Spacing.xl),
+                          _buildStatItem(context, 'Reviews', '8'),
+                          SizedBox(width: Spacing.xl),
+                          _buildStatItem(context, 'Rating', '4.8'),
+                        ],
+                      )
                       .animate()
                       .fadeIn(delay: 600.ms, duration: 600.ms)
                       .slideY(begin: 0.3, duration: 600.ms),
@@ -304,174 +313,186 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Column(
                 children: [
                   _buildSection(
-                    context,
-                    title: 'Personal Information',
-                    items: [
-                      _buildListItem(
                         context,
-                        icon: Icons.person_outline,
-                        title: 'Full Name',
-                        subtitle: _isEditing ? 'Tap to edit' : _userName,
-                        trailing: _isEditing ? const Icon(Icons.edit) : null,
-                        onTap: _isEditing ? () {
-                          // Focus on name field
-                        } : () {},
-                      ),
-                      _buildListItem(
-                        context,
-                        icon: Icons.phone_outlined,
-                        title: 'Phone Number',
-                        subtitle: _isEditing ? 'Tap to edit' : _userPhone,
-                        trailing: _isEditing ? const Icon(Icons.edit) : null,
-                        onTap: _isEditing ? () {
-                          _showPhoneEditDialog();
-                        } : null,
-                      ),
-                      _buildListItem(
-                        context,
-                        icon: Icons.language_outlined,
-                        title: 'Language',
-                        subtitle: _currentLocale.languageCode == 'en' ? 'English' : 'العربية',
-                        trailing: DropdownButton<Locale>(
-                          value: _currentLocale,
-                          underline: const SizedBox(),
-                          items: const [
-                            DropdownMenuItem(
-                              value: Locale('en'),
-                              child: Text('English'),
-                            ),
-                            DropdownMenuItem(
-                              value: Locale('ar'),
-                              child: Text('العربية'),
-                            ),
-                          ],
-                          onChanged: (locale) => _changeLocale(locale!),
-                        ),
-                        onTap: () {
-                          // Language selection is handled by dropdown
-                        },
-                      ),
-                      _buildListItem(
-                        context,
-                        icon: Icons.verified_user_outlined,
-                        title: 'Identity Verification',
-                        subtitle: 'Complete KYC verification',
-                        trailing: Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: Spacing.sm,
-                            vertical: Spacing.xs,
+                        title: 'Personal Information',
+                        items: [
+                          _buildListItem(
+                            context,
+                            icon: Icons.person_outline,
+                            title: 'Full Name',
+                            subtitle: _isEditing ? 'Tap to edit' : _userName,
+                            trailing: _isEditing
+                                ? const Icon(Icons.edit)
+                                : null,
+                            onTap: _isEditing
+                                ? () {
+                                    // Focus on name field
+                                  }
+                                : () {},
                           ),
-                          decoration: BoxDecoration(
-                            color: AppColors.warning100,
-                            borderRadius: BorderRadius.circular(BorderRadiusTokens.small),
+                          _buildListItem(
+                            context,
+                            icon: Icons.phone_outlined,
+                            title: 'Phone Number',
+                            subtitle: _isEditing ? 'Tap to edit' : _userPhone,
+                            trailing: _isEditing
+                                ? const Icon(Icons.edit)
+                                : null,
+                            onTap: _isEditing
+                                ? () {
+                                    _showPhoneEditDialog();
+                                  }
+                                : null,
                           ),
-                          child: Text(
-                            'Pending',
-                            style: TextStyle(
-                              color: AppColors.warning700,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
+                          _buildListItem(
+                            context,
+                            icon: Icons.language_outlined,
+                            title: 'Language',
+                            subtitle: _currentLocale.languageCode == 'en'
+                                ? 'English'
+                                : 'العربية',
+                            trailing: DropdownButton<Locale>(
+                              value: _currentLocale,
+                              underline: const SizedBox(),
+                              items: const [
+                                DropdownMenuItem(
+                                  value: Locale('en'),
+                                  child: Text('English'),
+                                ),
+                                DropdownMenuItem(
+                                  value: Locale('ar'),
+                                  child: Text('العربية'),
+                                ),
+                              ],
+                              onChanged: (locale) => _changeLocale(locale!),
                             ),
+                            onTap: () {
+                              // Language selection is handled by dropdown
+                            },
                           ),
-                        ),
-                        onTap: () => context.go(AppRouter.kyc),
-                      ),
-                    ],
-                  )
+                          _buildListItem(
+                            context,
+                            icon: Icons.verified_user_outlined,
+                            title: 'Identity Verification',
+                            subtitle: 'Complete KYC verification',
+                            trailing: Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: Spacing.sm,
+                                vertical: Spacing.xs,
+                              ),
+                              decoration: BoxDecoration(
+                                color: AppColors.warning100,
+                                borderRadius: BorderRadius.circular(
+                                  BorderRadiusTokens.small,
+                                ),
+                              ),
+                              child: Text(
+                                'Pending',
+                                style: TextStyle(
+                                  color: AppColors.warning700,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                            onTap: () => context.push(AppRouter.kyc),
+                          ),
+                        ],
+                      )
                       .animate()
                       .fadeIn(delay: 800.ms, duration: 600.ms)
                       .slideY(begin: 0.3, duration: 600.ms),
-                  
+
                   SizedBox(height: Spacing.lg),
 
                   _buildSection(
-                    context,
-                    title: 'Booking History',
-                    items: [
-                      _buildListItem(
                         context,
-                        icon: Icons.history,
-                        title: 'Past Bookings',
-                        subtitle: 'View your booking history',
-                        onTap: () => context.go(AppRouter.myBookings),
-                      ),
-                      _buildListItem(
-                        context,
-                        icon: Icons.favorite_outline,
-                        title: 'Favorites',
-                        subtitle: 'Your saved properties',
-                        onTap: () {
-                          // TODO: Navigate to favorites
-                        },
-                      ),
-                      _buildListItem(
-                        context,
-                        icon: Icons.rate_review_outlined,
-                        title: 'Reviews',
-                        subtitle: 'Reviews you\'ve written',
-                        onTap: () {
-                          // TODO: Navigate to reviews
-                        },
-                      ),
-                    ],
-                  )
+                        title: 'Booking History',
+                        items: [
+                          _buildListItem(
+                            context,
+                            icon: Icons.history,
+                            title: 'Past Bookings',
+                            subtitle: 'View your booking history',
+                            onTap: () => context.pushNamed('myBookings'),
+                          ),
+                          _buildListItem(
+                            context,
+                            icon: Icons.favorite_outline,
+                            title: 'Favorites',
+                            subtitle: 'Your saved properties',
+                            onTap: () {
+                              // TODO: Navigate to favorites
+                            },
+                          ),
+                          _buildListItem(
+                            context,
+                            icon: Icons.rate_review_outlined,
+                            title: 'Reviews',
+                            subtitle: 'Reviews you\'ve written',
+                            onTap: () {
+                              // TODO: Navigate to reviews
+                            },
+                          ),
+                        ],
+                      )
                       .animate()
                       .fadeIn(delay: 1000.ms, duration: 600.ms)
                       .slideY(begin: 0.3, duration: 600.ms),
-                  
+
                   SizedBox(height: Spacing.lg),
 
                   _buildSection(
-                    context,
-                    title: 'Support',
-                    items: [
-                      _buildListItem(
                         context,
-                        icon: Icons.help_outline,
-                        title: 'Help Center',
-                        subtitle: 'Get help and support',
-                        onTap: () {
-                          // TODO: Navigate to help center
-                        },
-                      ),
-                      _buildListItem(
-                        context,
-                        icon: Icons.chat_outlined,
-                        title: 'Contact Support',
-                        subtitle: 'Chat with our support team',
-                        onTap: () {
-                          // TODO: Open support chat
-                        },
-                      ),
-                      _buildListItem(
-                        context,
-                        icon: Icons.info_outline,
-                        title: 'About',
-                        subtitle: 'App version and legal info',
-                        onTap: () => context.go(AppRouter.about),
-                      ),
-                    ],
-                  )
+                        title: 'Support',
+                        items: [
+                          _buildListItem(
+                            context,
+                            icon: Icons.help_outline,
+                            title: 'Help Center',
+                            subtitle: 'Get help and support',
+                            onTap: () {
+                              // TODO: Navigate to help center
+                            },
+                          ),
+                          _buildListItem(
+                            context,
+                            icon: Icons.chat_outlined,
+                            title: 'Contact Support',
+                            subtitle: 'Chat with our support team',
+                            onTap: () {
+                              // TODO: Open support chat
+                            },
+                          ),
+                          _buildListItem(
+                            context,
+                            icon: Icons.info_outline,
+                            title: 'About',
+                            subtitle: 'App version and legal info',
+                            onTap: () => context.push(AppRouter.about),
+                          ),
+                        ],
+                      )
                       .animate()
                       .fadeIn(delay: 1200.ms, duration: 600.ms)
                       .slideY(begin: 0.3, duration: 600.ms),
-                  
+
                   SizedBox(height: Spacing.lg),
 
                   // Logout button
                   SizedBox(
-                    width: double.infinity,
-                    child: OutlinedButton.icon(
-                      onPressed: () => _showLogoutDialog(context),
-                      icon: const Icon(Icons.logout),
-                      label: Text(l10n.logout),
-                      style: OutlinedButton.styleFrom(
-                        foregroundColor: AppColors.error500,
-                        side: BorderSide(color: AppColors.error500),
-                        padding: EdgeInsets.symmetric(vertical: Spacing.md),
-                      ),
-                    ),
-                  )
+                        width: double.infinity,
+                        child: OutlinedButton.icon(
+                          onPressed: () => _showLogoutDialog(context),
+                          icon: const Icon(Icons.logout),
+                          label: Text(l10n.logout),
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: AppColors.error500,
+                            side: BorderSide(color: AppColors.error500),
+                            padding: EdgeInsets.symmetric(vertical: Spacing.md),
+                          ),
+                        ),
+                      )
                       .animate()
                       .fadeIn(delay: 1400.ms, duration: 600.ms)
                       .slideY(begin: 0.3, duration: 600.ms),
@@ -511,7 +532,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     required List<Widget> items,
   }) {
     final theme = Theme.of(context);
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -526,9 +547,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ),
         SizedBox(height: Spacing.sm),
-        Card(
-          child: Column(children: items),
-        ),
+        Card(child: Column(children: items)),
       ],
     );
   }
@@ -552,17 +571,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   void _showLogoutDialog(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: Text(l10n.logout),
         content: const Text('Are you sure you want to log out?'),
         actions: [
-          TextButton(
-            onPressed: () => context.pop(),
-            child: Text(l10n.cancel),
-          ),
+          TextButton(onPressed: () => context.pop(), child: Text(l10n.cancel)),
           TextButton(
             onPressed: () {
               context.pop(); // Close dialog

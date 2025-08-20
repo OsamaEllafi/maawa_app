@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../widgets/common/app_top_bar.dart';
 
 /// Property edit screen for owners
 class PropertyEditScreen extends StatelessWidget {
@@ -17,8 +18,8 @@ class PropertyEditScreen extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.edit),
+      appBar: AppTopBar(
+        title: l10n.edit,
       ),
       body: Center(
         child: Padding(

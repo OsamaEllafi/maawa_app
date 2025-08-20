@@ -5,6 +5,7 @@ import '../../../core/theme/app_theme.dart';
 import '../../../app/navigation/app_router.dart';
 import '../../../app/models/user_role.dart';
 import '../../widgets/debug/layout_debug_panel.dart';
+import '../../widgets/debug/route_inspector_panel.dart';
 import '../../widgets/common/app_top_bar.dart';
 
 /// Developer tools screen with style guide access and role simulation
@@ -33,9 +34,7 @@ class _DevToolsScreenState extends State<DevToolsScreen> {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppTopBar(
-        title: l10n.devToolsTitle,
-      ),
+      appBar: AppTopBar(title: l10n.devToolsTitle),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(Spacing.md),
         child: Column(
@@ -49,7 +48,7 @@ class _DevToolsScreenState extends State<DevToolsScreen> {
                   icon: Icons.palette_outlined,
                   title: 'Style Guide',
                   subtitle: 'Component library and design tokens',
-                  onTap: () => context.go(AppRouter.styleGuide),
+                  onTap: () => context.push(AppRouter.styleGuide),
                 ),
                 _buildListItem(
                   context,
@@ -77,6 +76,19 @@ class _DevToolsScreenState extends State<DevToolsScreen> {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => const LayoutDebugPanel(),
+                      ),
+                    );
+                  },
+                ),
+                _buildListItem(
+                  context,
+                  icon: Icons.route_outlined,
+                  title: 'Route Inspector',
+                  subtitle: 'View current route details and copy URLs',
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const RouteInspectorPanel(),
                       ),
                     );
                   },
@@ -173,7 +185,9 @@ class _DevToolsScreenState extends State<DevToolsScreen> {
                                 AppRouter.currentRole.value = selectedRole;
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
-                                    content: Text('Switched to ${selectedRole.displayName} role'),
+                                    content: Text(
+                                      'Switched to ${selectedRole.displayName} role',
+                                    ),
                                   ),
                                 );
                               }
@@ -239,7 +253,7 @@ class _DevToolsScreenState extends State<DevToolsScreen> {
     required List<Widget> items,
   }) {
     final theme = Theme.of(context);
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -253,9 +267,7 @@ class _DevToolsScreenState extends State<DevToolsScreen> {
           ),
         ),
         SizedBox(height: Spacing.sm),
-        Card(
-          child: Column(children: items),
-        ),
+        Card(child: Column(children: items)),
       ],
     );
   }
@@ -278,10 +290,7 @@ class _DevToolsScreenState extends State<DevToolsScreen> {
   }
 
   Widget _buildInfoItem(String label, String value) {
-    return ListTile(
-      title: Text(label),
-      trailing: Text(value),
-    );
+    return ListTile(title: Text(label), trailing: Text(value));
   }
 
   String _getThemeModeLabel(ThemeMode mode) {

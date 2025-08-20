@@ -389,6 +389,12 @@ abstract class AppLocalizations {
   /// **'Admin'**
   String get admin;
 
+  /// No description provided for @notFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Not Found'**
+  String get notFound;
+
   /// No description provided for @notFoundTitle.
   ///
   /// In en, this message translates to:
@@ -689,6 +695,456 @@ abstract class AppLocalizations {
   /// **'Item with ID \'{id}\' was not found. It may have been removed or the ID is incorrect.'**
   String invalidIdMessage(Object id);
 
+  /// No description provided for @ownerPropertiesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'My Properties'**
+  String get ownerPropertiesTitle;
+
+  /// No description provided for @addProperty.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Property'**
+  String get addProperty;
+
+  /// No description provided for @draft.
+  ///
+  /// In en, this message translates to:
+  /// **'Draft'**
+  String get draft;
+
+  /// No description provided for @pending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get pending;
+
+  /// No description provided for @published.
+  ///
+  /// In en, this message translates to:
+  /// **'Published'**
+  String get published;
+
+  /// No description provided for @rejected.
+  ///
+  /// In en, this message translates to:
+  /// **'Rejected'**
+  String get rejected;
+
+  /// No description provided for @perNight.
+  ///
+  /// In en, this message translates to:
+  /// **'per night'**
+  String get perNight;
+
+  /// No description provided for @guests.
+  ///
+  /// In en, this message translates to:
+  /// **'guests'**
+  String get guests;
+
+  /// No description provided for @media.
+  ///
+  /// In en, this message translates to:
+  /// **'Media'**
+  String get media;
+
+  /// No description provided for @submit.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit'**
+  String get submit;
+
+  /// No description provided for @submitForApproval.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit for Approval'**
+  String get submitForApproval;
+
+  /// No description provided for @submitForApprovalMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to submit this property for approval? This action cannot be undone.'**
+  String get submitForApprovalMessage;
+
+  /// No description provided for @propertySubmittedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Property submitted successfully!'**
+  String get propertySubmittedSuccessfully;
+
+  /// No description provided for @noDraftProperties.
+  ///
+  /// In en, this message translates to:
+  /// **'No draft properties'**
+  String get noDraftProperties;
+
+  /// No description provided for @noPendingProperties.
+  ///
+  /// In en, this message translates to:
+  /// **'No pending properties'**
+  String get noPendingProperties;
+
+  /// No description provided for @noPublishedProperties.
+  ///
+  /// In en, this message translates to:
+  /// **'No published properties'**
+  String get noPublishedProperties;
+
+  /// No description provided for @noRejectedProperties.
+  ///
+  /// In en, this message translates to:
+  /// **'No rejected properties'**
+  String get noRejectedProperties;
+
+  /// No description provided for @addFirstProperty.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Your First Property'**
+  String get addFirstProperty;
+
+  /// No description provided for @editProperty.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Property'**
+  String get editProperty;
+
+  /// No description provided for @basicInformation.
+  ///
+  /// In en, this message translates to:
+  /// **'Basic Information'**
+  String get basicInformation;
+
+  /// No description provided for @propertyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Property Title'**
+  String get propertyTitle;
+
+  /// No description provided for @propertyTitleHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a descriptive title for your property'**
+  String get propertyTitleHint;
+
+  /// No description provided for @propertyTitleRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Property title is required'**
+  String get propertyTitleRequired;
+
+  /// No description provided for @propertyTitleTooShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Title must be at least 10 characters'**
+  String get propertyTitleTooShort;
+
+  /// No description provided for @propertyDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Property Description'**
+  String get propertyDescription;
+
+  /// No description provided for @propertyDescriptionHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Describe your property in detail'**
+  String get propertyDescriptionHint;
+
+  /// No description provided for @propertyDescriptionRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Property description is required'**
+  String get propertyDescriptionRequired;
+
+  /// No description provided for @propertyDescriptionTooShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Description must be at least 50 characters'**
+  String get propertyDescriptionTooShort;
+
+  /// No description provided for @propertyDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Property Details'**
+  String get propertyDetails;
+
+  /// No description provided for @propertyType.
+  ///
+  /// In en, this message translates to:
+  /// **'Property Type'**
+  String get propertyType;
+
+  /// No description provided for @apartment.
+  ///
+  /// In en, this message translates to:
+  /// **'Apartment'**
+  String get apartment;
+
+  /// No description provided for @house.
+  ///
+  /// In en, this message translates to:
+  /// **'House'**
+  String get house;
+
+  /// No description provided for @villa.
+  ///
+  /// In en, this message translates to:
+  /// **'Villa'**
+  String get villa;
+
+  /// No description provided for @studio.
+  ///
+  /// In en, this message translates to:
+  /// **'Studio'**
+  String get studio;
+
+  /// No description provided for @address.
+  ///
+  /// In en, this message translates to:
+  /// **'Address'**
+  String get address;
+
+  /// No description provided for @addressHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the full address'**
+  String get addressHint;
+
+  /// No description provided for @addressRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Address is required'**
+  String get addressRequired;
+
+  /// No description provided for @pricePerNight.
+  ///
+  /// In en, this message translates to:
+  /// **'Price per Night'**
+  String get pricePerNight;
+
+  /// No description provided for @priceHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter price in LYD'**
+  String get priceHint;
+
+  /// No description provided for @priceRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Price is required'**
+  String get priceRequired;
+
+  /// No description provided for @priceInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid price'**
+  String get priceInvalid;
+
+  /// No description provided for @capacity.
+  ///
+  /// In en, this message translates to:
+  /// **'Capacity'**
+  String get capacity;
+
+  /// No description provided for @capacityHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Number of guests'**
+  String get capacityHint;
+
+  /// No description provided for @capacityRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Capacity is required'**
+  String get capacityRequired;
+
+  /// No description provided for @capacityInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid capacity'**
+  String get capacityInvalid;
+
+  /// No description provided for @checkInTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Check-in Time'**
+  String get checkInTime;
+
+  /// No description provided for @checkInTimeRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Check-in time is required'**
+  String get checkInTimeRequired;
+
+  /// No description provided for @checkOutTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Check-out Time'**
+  String get checkOutTime;
+
+  /// No description provided for @checkOutTimeRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Check-out time is required'**
+  String get checkOutTimeRequired;
+
+  /// No description provided for @amenities.
+  ///
+  /// In en, this message translates to:
+  /// **'Amenities'**
+  String get amenities;
+
+  /// No description provided for @updateProperty.
+  ///
+  /// In en, this message translates to:
+  /// **'Update Property'**
+  String get updateProperty;
+
+  /// No description provided for @createProperty.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Property'**
+  String get createProperty;
+
+  /// No description provided for @propertyUpdatedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Property updated successfully!'**
+  String get propertyUpdatedSuccessfully;
+
+  /// No description provided for @propertyCreatedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Property created successfully!'**
+  String get propertyCreatedSuccessfully;
+
+  /// No description provided for @mediaManager.
+  ///
+  /// In en, this message translates to:
+  /// **'Media Manager'**
+  String get mediaManager;
+
+  /// No description provided for @addMedia.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Media'**
+  String get addMedia;
+
+  /// No description provided for @mediaManagerInstructions.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag to reorder, tap to set primary image, or add new media'**
+  String get mediaManagerInstructions;
+
+  /// No description provided for @addMoreMedia.
+  ///
+  /// In en, this message translates to:
+  /// **'Add More'**
+  String get addMoreMedia;
+
+  /// No description provided for @saveChanges.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Changes'**
+  String get saveChanges;
+
+  /// No description provided for @primary.
+  ///
+  /// In en, this message translates to:
+  /// **'Primary'**
+  String get primary;
+
+  /// No description provided for @primaryImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Primary Image'**
+  String get primaryImage;
+
+  /// No description provided for @setAsPrimary.
+  ///
+  /// In en, this message translates to:
+  /// **'Set as Primary'**
+  String get setAsPrimary;
+
+  /// No description provided for @deleteMedia.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Media'**
+  String get deleteMedia;
+
+  /// No description provided for @noMediaItems.
+  ///
+  /// In en, this message translates to:
+  /// **'No media items'**
+  String get noMediaItems;
+
+  /// No description provided for @addMediaToGetStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Add photos and videos to showcase your property'**
+  String get addMediaToGetStarted;
+
+  /// No description provided for @addFirstMedia.
+  ///
+  /// In en, this message translates to:
+  /// **'Add First Media'**
+  String get addFirstMedia;
+
+  /// No description provided for @addPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Photo'**
+  String get addPhoto;
+
+  /// No description provided for @addVideo.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Video'**
+  String get addVideo;
+
+  /// No description provided for @imageAddedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Image added successfully!'**
+  String get imageAddedSuccessfully;
+
+  /// No description provided for @videoAddedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Video added successfully!'**
+  String get videoAddedSuccessfully;
+
+  /// No description provided for @primaryImageSet.
+  ///
+  /// In en, this message translates to:
+  /// **'Primary image set successfully!'**
+  String get primaryImageSet;
+
+  /// No description provided for @deleteMediaConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this media item?'**
+  String get deleteMediaConfirmation;
+
+  /// No description provided for @mediaDeletedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Media deleted successfully!'**
+  String get mediaDeletedSuccessfully;
+
+  /// No description provided for @mediaChangesSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Media changes saved successfully!'**
+  String get mediaChangesSaved;
+
+  /// No description provided for @navBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get navBack;
+
   /// No description provided for @displayLarge.
   ///
   /// In en, this message translates to:
@@ -778,12 +1234,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Label Small'**
   String get labelSmall;
-
-  /// No description provided for @primary.
-  ///
-  /// In en, this message translates to:
-  /// **'Primary'**
-  String get primary;
 
   /// No description provided for @secondary.
   ///
@@ -976,12 +1426,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Next'**
   String get next;
-
-  /// No description provided for @navBack.
-  ///
-  /// In en, this message translates to:
-  /// **'Back'**
-  String get navBack;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

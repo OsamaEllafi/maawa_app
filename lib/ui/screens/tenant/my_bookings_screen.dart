@@ -101,7 +101,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
           if (type == 'upcoming') ...[
             SizedBox(height: Spacing.lg),
             ElevatedButton(
-              onPressed: () => context.go(AppRouter.tenantHome),
+              onPressed: () => context.push(AppRouter.tenantHome),
               child: const Text('Explore Properties'),
             ),
           ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../widgets/common/app_top_bar.dart';
 
 /// Admin dashboard screen with system overview
 class AdminDashboardScreen extends StatelessWidget {
@@ -12,20 +13,15 @@ class AdminDashboardScreen extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Admin Dashboard'),
-      ),
+      appBar: AppTopBar(title: 'Admin Dashboard'),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(Spacing.md),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'System Overview',
-              style: theme.textTheme.headlineMedium,
-            ),
+            Text('System Overview', style: theme.textTheme.headlineMedium),
             SizedBox(height: Spacing.lg),
-            
+
             Row(
               children: [
                 Expanded(
@@ -50,7 +46,7 @@ class AdminDashboardScreen extends StatelessWidget {
               ],
             ),
             SizedBox(height: Spacing.md),
-            
+
             Row(
               children: [
                 Expanded(
@@ -75,13 +71,10 @@ class AdminDashboardScreen extends StatelessWidget {
               ],
             ),
             SizedBox(height: Spacing.lg),
-            
-            Text(
-              'Quick Actions',
-              style: theme.textTheme.titleLarge,
-            ),
+
+            Text('Quick Actions', style: theme.textTheme.titleLarge),
             SizedBox(height: Spacing.md),
-            
+
             Card(
               child: Column(
                 children: [
@@ -128,7 +121,7 @@ class AdminDashboardScreen extends StatelessWidget {
     required Color color,
   }) {
     final theme = Theme.of(context);
-    
+
     return Card(
       child: Padding(
         padding: EdgeInsets.all(Spacing.md),

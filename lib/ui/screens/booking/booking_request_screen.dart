@@ -7,10 +7,7 @@ import '../../../app/navigation/app_router.dart';
 
 /// Booking request screen for creating new bookings
 class BookingRequestScreen extends StatefulWidget {
-  const BookingRequestScreen({
-    super.key,
-    this.propertyId,
-  });
+  const BookingRequestScreen({super.key, this.propertyId});
 
   final String? propertyId;
 
@@ -36,9 +33,7 @@ class _BookingRequestScreenState extends State<BookingRequestScreen> {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppTopBar(
-        title: 'Book Property',
-      ),
+      appBar: AppTopBar(title: 'Book Property'),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(Spacing.md),
         child: Column(
@@ -55,7 +50,9 @@ class _BookingRequestScreenState extends State<BookingRequestScreen> {
                       height: 80,
                       decoration: BoxDecoration(
                         color: theme.colorScheme.surfaceVariant,
-                        borderRadius: BorderRadius.circular(BorderRadiusTokens.medium),
+                        borderRadius: BorderRadius.circular(
+                          BorderRadiusTokens.medium,
+                        ),
                       ),
                       child: Icon(
                         Icons.image,
@@ -78,11 +75,18 @@ class _BookingRequestScreenState extends State<BookingRequestScreen> {
                           SizedBox(height: Spacing.xs),
                           Row(
                             children: [
-                              Icon(Icons.star, size: 16, color: AppColors.warning500),
+                              Icon(
+                                Icons.star,
+                                size: 16,
+                                color: AppColors.warning500,
+                              ),
                               SizedBox(width: Spacing.xs),
                               Text('4.8', style: theme.textTheme.bodySmall),
                               SizedBox(width: Spacing.sm),
-                              Text('\$150/night', style: theme.textTheme.titleSmall),
+                              Text(
+                                '\$150/night',
+                                style: theme.textTheme.titleSmall,
+                              ),
                             ],
                           ),
                         ],
@@ -131,10 +135,15 @@ class _BookingRequestScreenState extends State<BookingRequestScreen> {
                     Icon(Icons.people_outline),
                     SizedBox(width: Spacing.md),
                     Expanded(
-                      child: Text('Number of guests', style: theme.textTheme.titleMedium),
+                      child: Text(
+                        'Number of guests',
+                        style: theme.textTheme.titleMedium,
+                      ),
                     ),
                     IconButton(
-                      onPressed: _guests > 1 ? () => setState(() => _guests--) : null,
+                      onPressed: _guests > 1
+                          ? () => setState(() => _guests--)
+                          : null,
                       icon: const Icon(Icons.remove),
                     ),
                     Container(
@@ -146,7 +155,9 @@ class _BookingRequestScreenState extends State<BookingRequestScreen> {
                       ),
                     ),
                     IconButton(
-                      onPressed: _guests < 10 ? () => setState(() => _guests++) : null,
+                      onPressed: _guests < 10
+                          ? () => setState(() => _guests++)
+                          : null,
                       icon: const Icon(Icons.add),
                     ),
                   ],
@@ -156,7 +167,10 @@ class _BookingRequestScreenState extends State<BookingRequestScreen> {
             SizedBox(height: Spacing.lg),
 
             // Message to host
-            Text('Message to Host (Optional)', style: theme.textTheme.titleLarge),
+            Text(
+              'Message to Host (Optional)',
+              style: theme.textTheme.titleLarge,
+            ),
             SizedBox(height: Spacing.md),
             TextField(
               controller: _messageController,
@@ -178,9 +192,7 @@ class _BookingRequestScreenState extends State<BookingRequestScreen> {
         padding: EdgeInsets.all(Spacing.md),
         decoration: BoxDecoration(
           color: theme.colorScheme.surface,
-          border: Border(
-            top: BorderSide(color: theme.colorScheme.outline),
-          ),
+          border: Border(top: BorderSide(color: theme.colorScheme.outline)),
         ),
         child: SafeArea(
           child: ElevatedButton(
@@ -199,7 +211,7 @@ class _BookingRequestScreenState extends State<BookingRequestScreen> {
     required VoidCallback onTap,
   }) {
     final theme = Theme.of(context);
-    
+
     return Card(
       child: InkWell(
         onTap: onTap,
@@ -212,13 +224,13 @@ class _BookingRequestScreenState extends State<BookingRequestScreen> {
               Text(label, style: theme.textTheme.bodyMedium),
               SizedBox(height: Spacing.xs),
               Text(
-                date != null 
-                  ? '${date.day}/${date.month}/${date.year}'
-                  : 'Select date',
+                date != null
+                    ? '${date.day}/${date.month}/${date.year}'
+                    : 'Select date',
                 style: theme.textTheme.titleMedium?.copyWith(
-                  color: date != null 
-                    ? theme.colorScheme.onSurface 
-                    : theme.colorScheme.onSurfaceVariant,
+                  color: date != null
+                      ? theme.colorScheme.onSurface
+                      : theme.colorScheme.onSurfaceVariant,
                 ),
               ),
             ],
@@ -256,10 +268,10 @@ class _BookingRequestScreenState extends State<BookingRequestScreen> {
 
   Widget _buildPriceRow(String label, String amount, {bool isTotal = false}) {
     final theme = Theme.of(context);
-    final style = isTotal 
-      ? theme.textTheme.titleMedium 
-      : theme.textTheme.bodyMedium;
-    
+    final style = isTotal
+        ? theme.textTheme.titleMedium
+        : theme.textTheme.bodyMedium;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -276,7 +288,7 @@ class _BookingRequestScreenState extends State<BookingRequestScreen> {
       firstDate: DateTime.now(),
       lastDate: DateTime.now().add(const Duration(days: 365)),
     );
-    
+
     if (date != null) {
       setState(() {
         _checkInDate = date;
@@ -289,16 +301,17 @@ class _BookingRequestScreenState extends State<BookingRequestScreen> {
   }
 
   Future<void> _selectCheckOutDate(BuildContext context) async {
-    final firstDate = _checkInDate?.add(const Duration(days: 1)) ?? 
-                     DateTime.now().add(const Duration(days: 2));
-    
+    final firstDate =
+        _checkInDate?.add(const Duration(days: 1)) ??
+        DateTime.now().add(const Duration(days: 2));
+
     final date = await showDatePicker(
       context: context,
       initialDate: firstDate,
       firstDate: firstDate,
       lastDate: DateTime.now().add(const Duration(days: 365)),
     );
-    
+
     if (date != null) {
       setState(() => _checkOutDate = date);
     }
@@ -314,12 +327,14 @@ class _BookingRequestScreenState extends State<BookingRequestScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Booking Submitted'),
-        content: const Text('Your booking request has been sent to the host. You will receive a confirmation shortly.'),
+        content: const Text(
+          'Your booking request has been sent to the host. You will receive a confirmation shortly.',
+        ),
         actions: [
           TextButton(
             onPressed: () {
               context.pop(); // Close dialog
-              context.go(AppRouter.myBookings); // Go to bookings
+              context.pushNamed('myBookings'); // Push to bookings
             },
             child: const Text('OK'),
           ),

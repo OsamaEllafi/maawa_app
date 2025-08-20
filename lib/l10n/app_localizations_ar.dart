@@ -156,6 +156,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get admin => 'المدير';
 
   @override
+  String get notFound => 'غير موجود';
+
+  @override
   String get notFoundTitle => 'الصفحة غير موجودة';
 
   @override
@@ -165,7 +168,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get notFoundSubtitle => 'الصفحة التي تبحث عنها غير موجودة أو تم نقلها.';
 
   @override
-  String get goHome => 'العودة للرئيسية';
+  String get goHome => 'الذهاب للرئيسية';
 
   @override
   String get login => 'تسجيل الدخول';
@@ -312,6 +315,231 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
+  String get ownerPropertiesTitle => 'عقاراتي';
+
+  @override
+  String get addProperty => 'إضافة عقار';
+
+  @override
+  String get draft => 'مسودة';
+
+  @override
+  String get pending => 'قيد الانتظار';
+
+  @override
+  String get published => 'منشور';
+
+  @override
+  String get rejected => 'مرفوض';
+
+  @override
+  String get perNight => 'لليلة الواحدة';
+
+  @override
+  String get guests => 'ضيوف';
+
+  @override
+  String get media => 'الوسائط';
+
+  @override
+  String get submit => 'إرسال';
+
+  @override
+  String get submitForApproval => 'إرسال للموافقة';
+
+  @override
+  String get submitForApprovalMessage => 'هل أنت متأكد من أنك تريد إرسال هذا العقار للموافقة؟ لا يمكن التراجع عن هذا الإجراء.';
+
+  @override
+  String get propertySubmittedSuccessfully => 'تم إرسال العقار بنجاح!';
+
+  @override
+  String get noDraftProperties => 'لا توجد عقارات مسودة';
+
+  @override
+  String get noPendingProperties => 'لا توجد عقارات قيد الانتظار';
+
+  @override
+  String get noPublishedProperties => 'لا توجد عقارات منشورة';
+
+  @override
+  String get noRejectedProperties => 'لا توجد عقارات مرفوضة';
+
+  @override
+  String get addFirstProperty => 'أضف أول عقار لك';
+
+  @override
+  String get editProperty => 'تعديل العقار';
+
+  @override
+  String get basicInformation => 'المعلومات الأساسية';
+
+  @override
+  String get propertyTitle => 'عنوان العقار';
+
+  @override
+  String get propertyTitleHint => 'أدخل عنواناً وصفياً لعقارك';
+
+  @override
+  String get propertyTitleRequired => 'عنوان العقار مطلوب';
+
+  @override
+  String get propertyTitleTooShort => 'يجب أن يكون العنوان 10 أحرف على الأقل';
+
+  @override
+  String get propertyDescription => 'وصف العقار';
+
+  @override
+  String get propertyDescriptionHint => 'صف عقارك بالتفصيل';
+
+  @override
+  String get propertyDescriptionRequired => 'وصف العقار مطلوب';
+
+  @override
+  String get propertyDescriptionTooShort => 'يجب أن يكون الوصف 50 حرف على الأقل';
+
+  @override
+  String get propertyDetails => 'تفاصيل العقار';
+
+  @override
+  String get propertyType => 'نوع العقار';
+
+  @override
+  String get apartment => 'شقة';
+
+  @override
+  String get house => 'منزل';
+
+  @override
+  String get villa => 'فيلا';
+
+  @override
+  String get studio => 'استوديو';
+
+  @override
+  String get address => 'العنوان';
+
+  @override
+  String get addressHint => 'أدخل العنوان الكامل';
+
+  @override
+  String get addressRequired => 'العنوان مطلوب';
+
+  @override
+  String get pricePerNight => 'السعر لليلة الواحدة';
+
+  @override
+  String get priceHint => 'أدخل السعر بالدينار الليبي';
+
+  @override
+  String get priceRequired => 'السعر مطلوب';
+
+  @override
+  String get priceInvalid => 'يرجى إدخال سعر صحيح';
+
+  @override
+  String get capacity => 'السعة';
+
+  @override
+  String get capacityHint => 'عدد الضيوف';
+
+  @override
+  String get capacityRequired => 'السعة مطلوبة';
+
+  @override
+  String get capacityInvalid => 'يرجى إدخال سعة صحيحة';
+
+  @override
+  String get checkInTime => 'وقت الوصول';
+
+  @override
+  String get checkInTimeRequired => 'وقت الوصول مطلوب';
+
+  @override
+  String get checkOutTime => 'وقت المغادرة';
+
+  @override
+  String get checkOutTimeRequired => 'وقت المغادرة مطلوب';
+
+  @override
+  String get amenities => 'المرافق';
+
+  @override
+  String get updateProperty => 'تحديث العقار';
+
+  @override
+  String get createProperty => 'إنشاء العقار';
+
+  @override
+  String get propertyUpdatedSuccessfully => 'تم تحديث العقار بنجاح!';
+
+  @override
+  String get propertyCreatedSuccessfully => 'تم إنشاء العقار بنجاح!';
+
+  @override
+  String get mediaManager => 'مدير الوسائط';
+
+  @override
+  String get addMedia => 'إضافة وسائط';
+
+  @override
+  String get mediaManagerInstructions => 'اسحب لإعادة الترتيب، اضغط لتعيين الصورة الأساسية، أو أضف وسائط جديدة';
+
+  @override
+  String get addMoreMedia => 'إضافة المزيد';
+
+  @override
+  String get saveChanges => 'حفظ التغييرات';
+
+  @override
+  String get primary => 'أساسي';
+
+  @override
+  String get primaryImage => 'الصورة الأساسية';
+
+  @override
+  String get setAsPrimary => 'تعيين كأساسي';
+
+  @override
+  String get deleteMedia => 'حذف الوسائط';
+
+  @override
+  String get noMediaItems => 'لا توجد عناصر وسائط';
+
+  @override
+  String get addMediaToGetStarted => 'أضف الصور والفيديوهات لعرض عقارك';
+
+  @override
+  String get addFirstMedia => 'إضافة أول وسائط';
+
+  @override
+  String get addPhoto => 'إضافة صورة';
+
+  @override
+  String get addVideo => 'إضافة فيديو';
+
+  @override
+  String get imageAddedSuccessfully => 'تم إضافة الصورة بنجاح!';
+
+  @override
+  String get videoAddedSuccessfully => 'تم إضافة الفيديو بنجاح!';
+
+  @override
+  String get primaryImageSet => 'تم تعيين الصورة الأساسية بنجاح!';
+
+  @override
+  String get deleteMediaConfirmation => 'هل أنت متأكد من أنك تريد حذف عنصر الوسائط هذا؟';
+
+  @override
+  String get mediaDeletedSuccessfully => 'تم حذف الوسائط بنجاح!';
+
+  @override
+  String get mediaChangesSaved => 'تم حفظ تغييرات الوسائط بنجاح!';
+
+  @override
+  String get navBack => 'رجوع';
+
+  @override
   String get displayLarge => 'عرض كبير';
 
   @override
@@ -355,9 +583,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get labelSmall => 'تسمية صغيرة';
-
-  @override
-  String get primary => 'أولي';
 
   @override
   String get secondary => 'ثانوي';
@@ -454,7 +679,4 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get next => 'التالي';
-
-  @override
-  String get navBack => 'رجوع';
 }

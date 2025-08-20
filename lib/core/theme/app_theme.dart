@@ -143,6 +143,7 @@ class AppColors {
 
   // Additional surface and state colors
   static const surface500 = Color(0xFF9AA0A6);
+  static const surface700 = Color(0xFF5F6368);
   static const success100 = Color(0xFFE8F5E8);
   static const error100 = Color(0xFFFFEBEE);
   static const warning100 = Color(0xFFFFF3E0);

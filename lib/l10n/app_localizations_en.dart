@@ -156,6 +156,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get admin => 'Admin';
 
   @override
+  String get notFound => 'Not Found';
+
+  @override
   String get notFoundTitle => 'Page Not Found';
 
   @override
@@ -312,6 +315,231 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get ownerPropertiesTitle => 'My Properties';
+
+  @override
+  String get addProperty => 'Add Property';
+
+  @override
+  String get draft => 'Draft';
+
+  @override
+  String get pending => 'Pending';
+
+  @override
+  String get published => 'Published';
+
+  @override
+  String get rejected => 'Rejected';
+
+  @override
+  String get perNight => 'per night';
+
+  @override
+  String get guests => 'guests';
+
+  @override
+  String get media => 'Media';
+
+  @override
+  String get submit => 'Submit';
+
+  @override
+  String get submitForApproval => 'Submit for Approval';
+
+  @override
+  String get submitForApprovalMessage => 'Are you sure you want to submit this property for approval? This action cannot be undone.';
+
+  @override
+  String get propertySubmittedSuccessfully => 'Property submitted successfully!';
+
+  @override
+  String get noDraftProperties => 'No draft properties';
+
+  @override
+  String get noPendingProperties => 'No pending properties';
+
+  @override
+  String get noPublishedProperties => 'No published properties';
+
+  @override
+  String get noRejectedProperties => 'No rejected properties';
+
+  @override
+  String get addFirstProperty => 'Add Your First Property';
+
+  @override
+  String get editProperty => 'Edit Property';
+
+  @override
+  String get basicInformation => 'Basic Information';
+
+  @override
+  String get propertyTitle => 'Property Title';
+
+  @override
+  String get propertyTitleHint => 'Enter a descriptive title for your property';
+
+  @override
+  String get propertyTitleRequired => 'Property title is required';
+
+  @override
+  String get propertyTitleTooShort => 'Title must be at least 10 characters';
+
+  @override
+  String get propertyDescription => 'Property Description';
+
+  @override
+  String get propertyDescriptionHint => 'Describe your property in detail';
+
+  @override
+  String get propertyDescriptionRequired => 'Property description is required';
+
+  @override
+  String get propertyDescriptionTooShort => 'Description must be at least 50 characters';
+
+  @override
+  String get propertyDetails => 'Property Details';
+
+  @override
+  String get propertyType => 'Property Type';
+
+  @override
+  String get apartment => 'Apartment';
+
+  @override
+  String get house => 'House';
+
+  @override
+  String get villa => 'Villa';
+
+  @override
+  String get studio => 'Studio';
+
+  @override
+  String get address => 'Address';
+
+  @override
+  String get addressHint => 'Enter the full address';
+
+  @override
+  String get addressRequired => 'Address is required';
+
+  @override
+  String get pricePerNight => 'Price per Night';
+
+  @override
+  String get priceHint => 'Enter price in LYD';
+
+  @override
+  String get priceRequired => 'Price is required';
+
+  @override
+  String get priceInvalid => 'Please enter a valid price';
+
+  @override
+  String get capacity => 'Capacity';
+
+  @override
+  String get capacityHint => 'Number of guests';
+
+  @override
+  String get capacityRequired => 'Capacity is required';
+
+  @override
+  String get capacityInvalid => 'Please enter a valid capacity';
+
+  @override
+  String get checkInTime => 'Check-in Time';
+
+  @override
+  String get checkInTimeRequired => 'Check-in time is required';
+
+  @override
+  String get checkOutTime => 'Check-out Time';
+
+  @override
+  String get checkOutTimeRequired => 'Check-out time is required';
+
+  @override
+  String get amenities => 'Amenities';
+
+  @override
+  String get updateProperty => 'Update Property';
+
+  @override
+  String get createProperty => 'Create Property';
+
+  @override
+  String get propertyUpdatedSuccessfully => 'Property updated successfully!';
+
+  @override
+  String get propertyCreatedSuccessfully => 'Property created successfully!';
+
+  @override
+  String get mediaManager => 'Media Manager';
+
+  @override
+  String get addMedia => 'Add Media';
+
+  @override
+  String get mediaManagerInstructions => 'Drag to reorder, tap to set primary image, or add new media';
+
+  @override
+  String get addMoreMedia => 'Add More';
+
+  @override
+  String get saveChanges => 'Save Changes';
+
+  @override
+  String get primary => 'Primary';
+
+  @override
+  String get primaryImage => 'Primary Image';
+
+  @override
+  String get setAsPrimary => 'Set as Primary';
+
+  @override
+  String get deleteMedia => 'Delete Media';
+
+  @override
+  String get noMediaItems => 'No media items';
+
+  @override
+  String get addMediaToGetStarted => 'Add photos and videos to showcase your property';
+
+  @override
+  String get addFirstMedia => 'Add First Media';
+
+  @override
+  String get addPhoto => 'Add Photo';
+
+  @override
+  String get addVideo => 'Add Video';
+
+  @override
+  String get imageAddedSuccessfully => 'Image added successfully!';
+
+  @override
+  String get videoAddedSuccessfully => 'Video added successfully!';
+
+  @override
+  String get primaryImageSet => 'Primary image set successfully!';
+
+  @override
+  String get deleteMediaConfirmation => 'Are you sure you want to delete this media item?';
+
+  @override
+  String get mediaDeletedSuccessfully => 'Media deleted successfully!';
+
+  @override
+  String get mediaChangesSaved => 'Media changes saved successfully!';
+
+  @override
+  String get navBack => 'Back';
+
+  @override
   String get displayLarge => 'Display Large';
 
   @override
@@ -355,9 +583,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get labelSmall => 'Label Small';
-
-  @override
-  String get primary => 'Primary';
 
   @override
   String get secondary => 'Secondary';
@@ -454,7 +679,4 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get next => 'Next';
-
-  @override
-  String get navBack => 'Back';
 }

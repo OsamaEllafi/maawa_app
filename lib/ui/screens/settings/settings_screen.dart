@@ -156,14 +156,14 @@ class SettingsScreen extends StatelessWidget {
                   icon: Icons.developer_mode,
                   title: 'Dev Tools',
                   subtitle: 'Style guide and development tools',
-                  onTap: () => context.go(AppRouter.devTools),
+                  onTap: () => context.push(AppRouter.devTools),
                 ),
                 _buildListItem(
                   context,
                   icon: Icons.info_outline,
                   title: 'About',
                   subtitle: 'App version and information',
-                  onTap: () => context.go(AppRouter.about),
+                  onTap: () => context.push(AppRouter.about),
                 ),
               ],
             ),
@@ -188,7 +188,7 @@ class SettingsScreen extends StatelessWidget {
     required List<Widget> items,
   }) {
     final theme = Theme.of(context);
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -202,9 +202,7 @@ class SettingsScreen extends StatelessWidget {
           ),
         ),
         SizedBox(height: Spacing.sm),
-        Card(
-          child: Column(children: items),
-        ),
+        Card(child: Column(children: items)),
       ],
     );
   }

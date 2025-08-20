@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../widgets/common/app_top_bar.dart';
 
 /// Owner bookings screen for managing property bookings
 class OwnerBookingsScreen extends StatelessWidget {
@@ -12,8 +13,8 @@ class OwnerBookingsScreen extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.bookings),
+      appBar: AppTopBar(
+        title: l10n.bookings,
       ),
       body: Center(
         child: Padding(

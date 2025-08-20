@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../l10n/app_localizations.dart';
-import '../../../app/navigation/app_router.dart';
+import '../../../app/navigation/tab_roots.dart';
 
-/// Sliver app bar variant with automatic back button logic
+
+/// Reusable SliverAppBar with automatic back button logic
+///
+/// Automatically shows back button on inner screens, but not on:
+/// - Tab root screens (Home, My Bookings, Wallet, Profile)
+/// - Auth screens (Splash, Onboarding, Login, Register, Forgot/Reset)
+///
+/// Back button behavior:
+/// - If custom onBack is provided, use that
+/// - If canPop() is true, use context.pop()
+/// - Otherwise, navigate to Home tab as fallback
 class AppSliverTopBar extends StatelessWidget {
-  final String title;
-  final List<Widget>? actions;
-  final bool showBackAutomatically;
-  final VoidCallback? onBack;
-  final bool centerTitle;
-  final bool pinned;
-  final bool floating;
-
   const AppSliverTopBar({
     super.key,
     required this.title,
@@ -20,22 +22,47 @@ class AppSliverTopBar extends StatelessWidget {
     this.showBackAutomatically = true,
     this.onBack,
     this.centerTitle = false,
-    this.pinned = true,
-    this.floating = false,
+    this.pinned = false,
   });
+
+  final String title;
+  final List<Widget>? actions;
+  final bool showBackAutomatically;
+  final VoidCallback? onBack;
+  final bool centerTitle;
+  final bool pinned;
 
   @override
   Widget build(BuildContext context) {
-    final loc = GoRouterState.of(context).uri.toString();
-    final isTabRoot = _isTabRoot(loc);
+    final routerState = GoRouterState.of(context);
+    // Prefer matchedLocation for more reliable detection when redirects/params are involved
+    final location = routerState.matchedLocation.isNotEmpty
+        ? routerState.matchedLocation
+        : routerState.uri.toString();
+
+    // Use centralized tab root detection
+    final isTabRoot = isTabRootPath(location);
+
+    // Determine if we should show back button
     final canPopHere = context.canPop();
-    final showBack = showBackAutomatically && !isTabRoot && canPopHere;
+    final showBack = showBackAutomatically && !isTabRoot;
+
+    void _handleBack() {
+      if (onBack != null) {
+        onBack!();
+      } else if (canPopHere) {
+        context.pop();
+      } else {
+        // Fallback to Home tab when no navigation history
+        context.goNamed('tenantHome');
+      }
+    }
 
     return SliverAppBar(
       automaticallyImplyLeading: false,
       leading: showBack
           ? IconButton(
-              onPressed: onBack ?? () => context.pop(),
+              onPressed: _handleBack,
               icon: const BackButtonIcon(),
               tooltip: AppLocalizations.of(context)?.navBack ?? 'Back',
             )
@@ -44,19 +71,6 @@ class AppSliverTopBar extends StatelessWidget {
       centerTitle: centerTitle,
       actions: actions,
       pinned: pinned,
-      floating: floating,
     );
-  }
-
-  /// Check if current location is a tab root
-  bool _isTabRoot(String location) {
-    const tabRootPaths = [
-      '/tenant/home',
-      '/tenant/bookings/my',
-      '/tenant/wallet',
-      '/tenant/profile',
-    ];
-
-    return tabRootPaths.any((path) => location.startsWith(path));
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../models/user_role.dart';
-import '../../l10n/app_localizations.dart';
+
 import '../../ui/screens/not_found_screen.dart';
 import '../../ui/layouts/main_scaffold.dart';
 import '../../ui/screens/auth/splash_screen.dart';
@@ -20,8 +20,8 @@ import '../../ui/screens/wallet/wallet_topup_screen.dart';
 import '../../ui/screens/wallet/wallet_withdraw_screen.dart';
 import '../../ui/screens/wallet/wallet_history_screen.dart';
 import '../../ui/screens/owner/owner_properties_screen.dart';
-import '../../ui/screens/owner/property_edit_screen.dart';
-import '../../ui/screens/owner/property_media_screen.dart';
+import '../../ui/screens/properties/owner/property_editor_screen.dart';
+import '../../ui/screens/properties/owner/property_media_manager_screen.dart';
 import '../../ui/screens/owner/owner_bookings_screen.dart';
 import '../../ui/screens/admin/admin_dashboard_screen.dart';
 import '../../ui/screens/admin/admin_properties_screen.dart';
@@ -35,6 +35,7 @@ import '../../ui/screens/settings/settings_screen.dart';
 import '../../ui/screens/settings/dev_tools_screen.dart';
 import '../../ui/screens/about/about_screen.dart';
 import '../../ui/screens/style_guide_screen.dart';
+import '../../demo/demo_data.dart';
 
 /// Route constants and documentation
 /// 
@@ -107,7 +108,8 @@ class AppRouter {
   static const String about = '/settings/about';
   static const String ownerProperties = '/owner/properties';
   static const String ownerProperty = '/owner/property';
-  static const String ownerPropertyEdit = '/owner/property/edit';
+  static const String ownerPropertyEditorNew = '/owner/properties/new';
+  static const String ownerPropertyEditorEdit = '/owner/properties/:id/edit';
   static const String ownerBooking = '/owner/booking';
   static const String ownerBookings = '/owner/bookings';
   static const String adminDashboard = '/admin/dashboard';
@@ -132,6 +134,28 @@ class AppRouter {
   }) {
     return GoRouter(
       initialLocation: authSplash,
+      redirect: (context, state) {
+        // Global canonicalization: strip trailing slashes while preserving query/fragment
+        final location = state.uri.toString();
+        if (location.endsWith('/') && location != '/') {
+          final uri = state.uri;
+          // Strip all trailing slashes
+          String canonicalPath = uri.path;
+          while (canonicalPath.endsWith('/') && canonicalPath != '/') {
+            canonicalPath = canonicalPath.substring(0, canonicalPath.length - 1);
+          }
+          final canonicalUri = uri.replace(path: canonicalPath);
+          final canonicalLocation = canonicalUri.toString();
+          
+          // Short-circuit if canonical path equals current path to avoid loops
+          if (canonicalLocation == location) {
+            return null;
+          }
+          
+          return canonicalLocation;
+        }
+        return null; // No redirect needed
+      },
       routes: [
         // Auth routes (no scaffold)
         GoRoute(
@@ -183,6 +207,7 @@ class AppRouter {
             // Tenant routes
             GoRoute(
               path: tenantHome,
+              name: 'tenantHome',
               builder: (context, state) => const HomeScreen(),
             ),
             GoRoute(
@@ -240,21 +265,59 @@ class AppRouter {
               path: ownerProperties,
               builder: (context, state) => const OwnerPropertiesScreen(),
             ),
+            // Backward compatibility redirects
+            GoRoute(
+              path: '/owner/property/editor',
+              redirect: (context, state) => ownerPropertyEditorNew,
+            ),
+            GoRoute(
+              path: '/owner/property/:id/editor',
+              redirect: (context, state) => '/owner/properties/${state.pathParameters['id']}/edit',
+            ),
+            GoRoute(
+              path: ownerPropertyEditorNew,
+              name: 'ownerPropertyEditorNew',
+              builder: (context, state) => const PropertyEditorScreen(),
+            ),
+            GoRoute(
+              path: ownerPropertyEditorEdit,
+              name: 'ownerPropertyEditorEdit',
+              builder: (context, state) {
+                final rawPropertyId = state.pathParameters['id'];
+                
+                // Robust ID handling: decode and validate
+                if (rawPropertyId == null || rawPropertyId.trim().isEmpty) {
+                  return const NotFoundScreen();
+                }
+                
+                // Decode percent-encoded ID
+                final propertyId = Uri.decodeComponent(rawPropertyId.trim());
+                
+                // UI-only guard: check if property exists in demo data
+                final propertyExists = DemoData.properties.any((p) => p.id == propertyId);
+                if (!propertyExists) {
+                  return const NotFoundScreen();
+                }
+                return PropertyEditorScreen(propertyId: propertyId);
+              },
+            ),
+            GoRoute(
+              path: '/owner/property/:id/media',
+              name: 'propertyMediaManager',
+              builder: (context, state) => PropertyMediaManagerScreen(
+                propertyId: state.pathParameters['id']!,
+              ),
+            ),
             GoRoute(
               path: '$ownerProperty/:id',
               builder: (context, state) => PropertyDetailScreen(
                 propertyId: state.pathParameters['id']!,
               ),
             ),
-            GoRoute(
-              path: '$ownerProperty/:id/edit',
-              builder: (context, state) => PropertyEditScreen(
-                propertyId: state.pathParameters['id']!,
-              ),
-            ),
+
             GoRoute(
               path: '$ownerProperty/:id/media',
-              builder: (context, state) => PropertyMediaScreen(
+              builder: (context, state) => PropertyMediaManagerScreen(
                 propertyId: state.pathParameters['id']!,
               ),
             ),
